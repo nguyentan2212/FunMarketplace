@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ChooseCollection from "../components/ChooseCollection";
-import { createToken } from "../../scripts/api";
+import { storeNft } from "../../scripts/ipfs";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.sticky.white {
@@ -42,16 +42,17 @@ const GlobalStyles = createGlobalStyle`
 
 function Create(props) {
   const [file, setFile] = useState(null);
+  const [image, setImage] = useState(null);
   const [title, setTitle] = useState(null);
   const [price, setPrice] = useState(null);
   const [royalties, setRoyalties] = useState(null);
 
   const CreateSchema = Yup.object().shape({
-    image: "",
+    image: Yup.string().required("Required"),
     title: Yup.string().required("Required"),
     description: Yup.string(),
     price: Yup.number().moreThan(0, "Must more than 0"),
-    royalties: Yup.number().max(70, "Max is 70")
+    royalties: Yup.number().max(40, "Max is 40")
   });
 
   const formik = useFormik({
@@ -64,20 +65,21 @@ function Create(props) {
     },
     validationSchema: CreateSchema,
     onSubmit: (values) => {
-      createToken(window.ethereum, 0, values.image);
       console.log(values);
+      
     }
   });
 
   const onImageChange = (e) => {
-    var f = URL.createObjectURL(e.target.files[0]);
-    console.log(f);
-    setFile(f);
-    formik.setFieldValue("image", f);
+    var m = URL.createObjectURL(e.target.files[0]);
+    console.log(m);
+    setFile(e.target.files[0]);
+    setImage(m);
+    formik.setFieldValue("image", m);
   };
 
   const onRoyaltiesChange = (e) => {
-    if (e.target.value >= 0 && e.target.value <= 70) {
+    if (e.target.value >= 0 && e.target.value <= 40) {
       formik.setFieldValue("royalties", e.target.value);
       setRoyalties(e.target.value);
     }
@@ -88,7 +90,7 @@ function Create(props) {
       formik.setFieldValue("price", e.target.value);
       setPrice(e.target.value);
     }
-  }
+  };
 
   const newCollection = (e) => {
     const data = {
@@ -96,8 +98,8 @@ function Create(props) {
       symbol: "MTN",
       baseURL: "",
       thumbnail: "img/collections/coll-4.jpg"
-    }
-    createToken(data);
+    };
+    
   };
 
   return (
@@ -136,7 +138,12 @@ function Create(props) {
                 <div className="spacer-single"></div>
 
                 <h5>Collection</h5>
-                <ChooseCollection title="Create" subtitle="ERC-721" img="./img/plus.png" clickHandler={newCollection}/>
+                <ChooseCollection
+                  title="Create"
+                  subtitle="ERC-721"
+                  img="./img/plus.png"
+                  clickHandler={() => storeNft(file)}
+                />
 
                 <div className="spacer-single"></div>
 
@@ -187,7 +194,7 @@ function Create(props) {
                   name="item_royalties"
                   id="item_royalties"
                   className="form-control"
-                  placeholder="suggested: 0, 10%, 20%, 30%. Maximum is 70%"
+                  placeholder="suggested: 0, 10%, 20%, 30%. Maximum is 40%"
                   onChange={onRoyaltiesChange}
                   value={formik.values.royalties}
                 />
@@ -209,19 +216,14 @@ function Create(props) {
                 </span>
               </div>
               <div className="nft__item_wrap">
-                {!file && (
+                {!image && (
                   <span className="d-create-file" style={{ minHeight: "200px" }}>
                     <p>Upload file to preview your brand new NFT</p>
                   </span>
                 )}
-                {file && (
+                {image && (
                   <span>
-                    <img
-                      src={file}
-                      id="get_file_2"
-                      className="lazy nft__item_preview"
-                      alt=""
-                    />
+                    <img src={image} id="get_file_2" className="lazy nft__item_preview" alt="" />
                   </span>
                 )}
               </div>

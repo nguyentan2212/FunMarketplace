@@ -47,7 +47,7 @@ contract FunNFT is NFTBase {
         require(_verify(digest, data.signature), "Invalid signature");
 
         _safeMint(to, _tokenIdCounter.current());
-        _saveCreator(_tokenIdCounter.current(), creator);
+        _saveCreator(_tokenIdCounter.current(), creator, data.royalty);
         _setTokenURI(_tokenIdCounter.current(), data.uri);
         /* 
         Save royalty

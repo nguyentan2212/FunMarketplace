@@ -15,9 +15,9 @@ contract TokenFactory {
 
     event NewCollection(string name, string symbol, string uri, address collectionAddress);
 
-    constructor(address exchange){
+    constructor(address exchange, address _implementationToken){
         exchangeProxy = exchange;
-        collectionImplementation = address(new FunNFT());
+        collectionImplementation = _implementationToken;
     }
 
     function createToken(string memory _name, string memory _symbol, string memory _baseURI, string memory _thumbnail)

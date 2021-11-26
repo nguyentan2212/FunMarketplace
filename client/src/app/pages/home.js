@@ -27,7 +27,7 @@ const home= () => (
             </div>
           </div>
           <div className='col-lg-12'>
-            <CarouselCollection/>
+            
           </div>
         </div>
       </section>

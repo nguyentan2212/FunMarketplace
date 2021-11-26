@@ -12,7 +12,9 @@ contract NFTBase is Initializable, NFTDefaultApproval, OwnableUpgradeable {
 
     string public baseTokenURI;
     mapping(uint256 => address) private creators;
-    event Creator(uint256 tokenId, address creator);
+    mapping(uint256 => uint256) private royalties;
+
+    event Creator(uint256 tokenId, address creator, uint256 royalty);
 
     function _baseURI() internal view override returns (string memory) {
         return baseTokenURI;
@@ -24,6 +26,10 @@ contract NFTBase is Initializable, NFTDefaultApproval, OwnableUpgradeable {
 
     function creatorOf(uint256 tokenId) public view returns (address){
         return creators[tokenId];
+    }
+
+    function royaltyOf(uint256 tokenId) public view returns(uint256){
+        return royalties[tokenId];
     }
 
     function createdTokenOf(address creator) public view returns (uint256) {
@@ -53,10 +59,12 @@ contract NFTBase is Initializable, NFTDefaultApproval, OwnableUpgradeable {
         revert("This token did not be created by this creator.");
     }
 
-    function _saveCreator(uint256 tokenId, address creator) internal {
+    function _saveCreator(uint256 tokenId, address creator, uint256 royalty) internal {
+        require(royalty <= 40, "royalty cannot be greater than 40");
         creators[tokenId] = creator;
+        royalties[tokenId] = royalty;
 
-        emit Creator(tokenId, creator);
+        emit Creator(tokenId, creator, royalty);
     }
 
     function supportsInterface(bytes4 interfaceId)

@@ -9,6 +9,7 @@ library FunLibAsset {
         uint256 tokenId;
         string uri;
         address creator;
+        uint256 royalty;
         bytes signature;
     }
 }
