@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 import { storeData } from "../../scripts/ipfs";
 import { createCollection } from "../../scripts/tokenFactory";
 
 function NewCollectionModal(props) {
   const { reload, setReload } = props;
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const CreateSchema = Yup.object().shape({
     image: Yup.mixed().required("Required"),
@@ -24,10 +24,33 @@ function NewCollectionModal(props) {
     },
     validationSchema: CreateSchema,
     onSubmit: async (values) => {
-      setLoading(true);
-      const thumbnailURI = await storeData(image);
-      await createCollection(thumbnailURI, values.name, values.symbol, values.baseURI);
-      setLoading(false);
+      var thumbnailURI = null;
+
+      await Swal.fire({
+        title: "Upload thumbnail to IPFS",
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          thumbnailURI = await storeData(image);
+          Swal.close();
+        }
+      });
+
+      await Swal.fire({
+        title: "Create collection",
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          await createCollection(thumbnailURI, values.name, values.symbol);
+          Swal.close();
+        }
+      });
+
+      await Swal.fire({
+        icon: "success",
+        title: "Created success"
+      });
+
       setReload(!reload);
     }
   });
@@ -43,7 +66,7 @@ function NewCollectionModal(props) {
         <div className="modal-content">
           <form className="form-border" onSubmit={formik.handleSubmit}>
             <div className="modal-header">
-              <div className="modal-title">New Collection</div>
+              <h4 className="modal-title mx-auto">New Collection</h4>
             </div>
             <div className="modal-body">
               <div className="field-set">
@@ -85,13 +108,12 @@ function NewCollectionModal(props) {
                   <div className="invalid-feedback">{formik.errors.symbol}</div>
                 ) : null}
               </div>
-              {loading ? <div>Loading...</div> : <div>Done!</div>}
             </div>
             <div className="modal-footer">
-              <a className="btn-main inline white" data-bs-dismiss="modal" disabled={loading}>
+              <a className="btn-main inline white" data-bs-dismiss="modal" onClick={formik.resetForm}>
                 Close
               </a>
-              <input type="submit" className="btn-main" value="Create" disabled={loading}/>
+              <input type="submit" className="btn-main" value="Create" />
             </div>
           </form>
         </div>

@@ -3,6 +3,7 @@ import Footer from "../components/footer";
 import { createGlobalStyle } from "styled-components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 import ChooseCollection from "../components/ChooseCollection";
 import { storeNft } from "../../scripts/ipfs";
 import { sell, getAllOrders } from "../../scripts/exchange";
@@ -49,7 +50,6 @@ function Create() {
   const [price, setPrice] = useState(null);
   const [royalties, setRoyalties] = useState(null);
   const [collection, setCollection] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
 
   const CreateSchema = Yup.object().shape({
@@ -70,14 +70,41 @@ function Create() {
     },
     validationSchema: CreateSchema,
     onSubmit: async (values) => {
-      setLoading(true);
+      var uri = null;
+      var tokenId = 0;
       // store nft on ipfs
-      const uri = await storeNft(values.image, values.description);
-      const tokenId = await mintAndTransfer(collection.address, values.royalties, uri);
-      await sell(collection.address, tokenId, values.price);
-      const orders = await getAllOrders();
-      console.log(orders);
-      setLoading(false);
+      await Swal.fire({
+        title: "Upload to IPFS",
+        allowOutsideClick: false,
+        didOpen: async () => {
+          Swal.showLoading();
+          uri = await storeNft(values.image, values.description);
+          Swal.close();
+        }
+      });
+
+      await Swal.fire({
+        title: "Mint NFT",
+        didOpen: async () => {
+          Swal.showLoading();
+          tokenId = await mintAndTransfer(collection.address, values.royalties, uri);
+          Swal.close();
+        }
+      });
+
+      await Swal.fire({
+        title: "Place order",
+        didOpen: async () => {
+          Swal.showLoading();
+          await sell(collection.address, tokenId, values.price);
+          Swal.close();
+        }
+      });
+
+      await Swal.fire({
+        icon: "success",
+        title: "Place order success"
+      });
     }
   });
 
@@ -199,8 +226,7 @@ function Create() {
                   <div className="invalid-feedback">{formik.errors.royalties}</div>
                 ) : null}
                 <div className="spacer-10"></div>
-                {loading ? <div>Loading...</div> : <div>Done!</div>}
-                <input type="submit" className="btn-main" disabled={loading} value="Create Item" />
+                <input type="submit" className="btn-main" value="Create Item" />
               </div>
             </form>
           </div>
