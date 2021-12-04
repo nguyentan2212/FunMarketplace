@@ -18,7 +18,7 @@ contract FunNFT is NFTBase {
     }
     string private thumbnail;
 
-    function initialize(string memory _name, string memory _symbol, string memory _baseTokenURI, string memory _thumbnail) 
+    function initialize(string memory _name, string memory _symbol, string memory _thumbnail) 
     initializer 
     public {
         __ERC721_init(_name, _symbol);
@@ -26,8 +26,6 @@ contract FunNFT is NFTBase {
         __ERC721URIStorage_init();
         __ERC721Burnable_init();
         __Ownable_init();
-
-        baseTokenURI = _baseTokenURI;
         thumbnail = _thumbnail;
     }
 

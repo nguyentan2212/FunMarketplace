@@ -13,26 +13,26 @@ contract TokenFactory {
 
     address immutable collectionImplementation;
 
-    event NewCollection(string name, string symbol, string uri, address collectionAddress);
+    event NewCollection(string name, string symbol, address collectionAddress);
 
     constructor(address exchange, address _implementationToken){
         exchangeProxy = exchange;
         collectionImplementation = _implementationToken;
     }
 
-    function createToken(string memory _name, string memory _symbol, string memory _baseURI, string memory _thumbnail)
+    function createToken(string memory _name, string memory _symbol, string memory _thumbnail)
     public {
-        bytes32 salt = keccak256(abi.encodePacked(_collectionIdCounter.current(), _name, _symbol, _baseURI));
+        bytes32 salt = keccak256(abi.encodePacked(_collectionIdCounter.current(), _name, _symbol));
         address collectionAddress = ClonesUpgradeable.cloneDeterministic(collectionImplementation, salt);
         FunNFT collection = FunNFT(collectionAddress);
-        collection.initialize(_name, _symbol, _baseURI, _thumbnail);
+        collection.initialize(_name, _symbol, _thumbnail);
         _collections[_collectionIdCounter.current()] = collectionAddress;
         _collectionIdCounter.increment();
         
         collection.setDefaultApproval(exchangeProxy, true);
         collection.transferOwnership(msg.sender);
 
-        emit NewCollection(_name, _symbol, _baseURI, collectionAddress);
+        emit NewCollection(_name, _symbol, collectionAddress);
     }
 
     function fetchCollection(uint256 index) external view returns(address result) {

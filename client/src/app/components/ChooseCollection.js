@@ -3,7 +3,7 @@ import { getCurrentAccount } from "../../scripts/ethereum";
 import { getCollectionsOf, getCollectionInfo } from "../../scripts/tokenFactory";
 
 function ChooseCollection(props) {
-  const { setCollection } = props;
+  const { setCollection, reload } = props;
   const [collections, setCollections] = useState([]);
 
   useEffect(() => {
@@ -20,26 +20,27 @@ function ChooseCollection(props) {
       setCollection(tempList[0]);
     };
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    console.log(collections);
-  }, [collections]);
+  }, [reload]);
 
   const optionChange = (e) => {
     setCollection(e.target.value);
-  }
+  };
+
   return (
-    <div className="input-group">
-      <select className="form-select" onChange={optionChange} value={collections[0]}>
-        {collections &&
-          collections.map((collection, index) => (
-            <option value={collection.address} key={index}>
-              {collection.name}
-            </option>
-          ))}
-      </select>
-      <button className="btn-main" type="button" id="button-addon2">New</button>
+    <div>
+      <div className="input-group">
+        <select className="form-select" onChange={optionChange}>
+          {collections &&
+            collections.map((collection, index) => (
+              <option value={collection.address} key={index}>
+                {collection.name}
+              </option>
+            ))}
+        </select>
+        <button className="btn-main" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+          New
+        </button>
+      </div>
     </div>
   );
 }

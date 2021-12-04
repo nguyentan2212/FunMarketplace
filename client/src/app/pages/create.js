@@ -7,6 +7,7 @@ import ChooseCollection from "../components/ChooseCollection";
 import { storeNft } from "../../scripts/ipfs";
 import { sell, getAllOrders } from "../../scripts/exchange";
 import { mintAndTransfer } from "../../scripts/tokenFactory";
+import NewCollectionModal from "../components/NewCollectionModal";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.sticky.white {
@@ -49,6 +50,7 @@ function Create() {
   const [royalties, setRoyalties] = useState(null);
   const [collection, setCollection] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const CreateSchema = Yup.object().shape({
     image: Yup.mixed().required("Required"),
@@ -98,19 +100,10 @@ function Create() {
     setTitle(e.target.value);
   };
 
-  const optionChange = (e) => {
-    const data = {
-      name: "My Token",
-      symbol: "MTN",
-      baseURL: "",
-      thumbnail: "img/collections/coll-4.jpg"
-    };
-    console.log(e.target.value);
-  };
-
   return (
     <div>
       <GlobalStyles />
+      <NewCollectionModal reload={reload} setReload={setReload} />
       <section
         className="jumbotron breadcumb no-bg"
         style={{ backgroundImage: `url(${"./img/background/subheader.jpg"})` }}>
@@ -146,7 +139,7 @@ function Create() {
                 <div className="spacer-single"></div>
 
                 <h5>Collection</h5>
-                <ChooseCollection setCollection={setCollection} />
+                <ChooseCollection setCollection={setCollection} reload={reload} />
 
                 <div className="spacer-single"></div>
 

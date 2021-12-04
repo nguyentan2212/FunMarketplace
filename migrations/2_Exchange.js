@@ -2,7 +2,7 @@ const Exchange = artifacts.require("Exchange");
 const TokenFactory = artifacts.require("TokenFactory");
 const FNFT = artifacts.require("FunNFT");
 
-module.exports = async function (deployer, network) {
+module.exports = async function (deployer) {
   await deployer.deploy(Exchange);
   const exchange = await Exchange.deployed();
 
@@ -14,7 +14,6 @@ module.exports = async function (deployer, network) {
   await factory.createToken(
     "Funny NFT",
     "FNFT",
-    "",
     "QmPgE4P6BwsiwVwF3tswhPH3WEenq74fjbPCKSFoSUZRsq"
   );
 };

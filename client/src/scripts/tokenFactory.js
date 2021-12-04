@@ -18,8 +18,7 @@ export const getCollectionInfo = async (address) => {
   const collection = await initContract(FunNFT, address);
   const name = await collection.name();
   const symbol = await collection.symbol();
-  const totalSupply = await collection.totalSupply();
-  return { name, symbol, address, totalSupply };
+  return { name, symbol, address };
 };
 
 export const mintAndTransfer = async (collection, royalty, tokenURI) => {
@@ -32,6 +31,16 @@ export const mintAndTransfer = async (collection, royalty, tokenURI) => {
     console.log(logs[0]);
     const { tokenId } = logs[0].args;
     return tokenId.toNumber();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const createCollection = async (thumbnailURI, name, symbol) => {
+  const factory = await initContract(Factory);
+  const creator = await getCurrentAccount();
+  try {
+    await factory.createToken(name, symbol, thumbnailURI, {from: creator});
   } catch (e) {
     console.log(e);
   }

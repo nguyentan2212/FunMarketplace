@@ -18,7 +18,7 @@ function getClient() {
   return client;
 }
 
-async function store(data) {
+export async function storeData(data) {
   const client = getClient();
   // post to ipfs
   const { cid } = await client.add(data, { pin: true });
@@ -29,11 +29,11 @@ async function store(data) {
 
 export async function storeNft(imageFile, description) {
   // store image on ipfs
-  const imagePath = await store(imageFile);
+  const imagePath = await storeData(imageFile);
   // create nft json data file
   const nftJson = JSON.stringify({ imagePath, description });
   // store nft data to ipfs
-  const nftPath = await store(nftJson);
+  const nftPath = await storeData(nftJson);
   console.log(nftPath);
   return nftPath;
 }
