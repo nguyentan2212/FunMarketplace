@@ -18,10 +18,22 @@ function getClient() {
   return client;
 }
 
-export async function storeNft(imageFile) {
+async function store(data) {
   const client = getClient();
-  const {cid} = await client.add(imageFile, {pin: true});
-  const imageURI = `https://ipfs.infura.io/ipfs/${cid}`;
-  console.log(imageURI);
-  return imageURI;
+  // post to ipfs
+  const { cid } = await client.add(data, { pin: true });
+  // get path
+  const uri = `https://ipfs.infura.io/ipfs/${cid}`;
+  return uri;
+}
+
+export async function storeNft(imageFile, description) {
+  // store image on ipfs
+  const imagePath = await store(imageFile);
+  // create nft json data file
+  const nftJson = JSON.stringify({ imagePath, description });
+  // store nft data to ipfs
+  const nftPath = await store(nftJson);
+  console.log(nftPath);
+  return nftPath;
 }

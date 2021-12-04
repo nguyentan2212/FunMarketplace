@@ -8,13 +8,11 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.js";
 import "./assets/style.scss";
 import App from "./App";
-import { Web3Provider } from "./scripts/contexts/Web3Provider";
+import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <Web3Provider>
-    <App />
-  </Web3Provider>,
+  <App />,
   document.getElementById("root")
 );
 // If you want your app to work offline and load faster, you can change

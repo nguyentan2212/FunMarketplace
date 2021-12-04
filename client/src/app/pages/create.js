@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Footer from "../components/footer";
 import { createGlobalStyle } from "styled-components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ChooseCollection from "../components/ChooseCollection";
 import { storeNft } from "../../scripts/ipfs";
+import { sell, getAllOrders } from "../../scripts/exchange";
+import { mintAndTransfer } from "../../scripts/tokenFactory";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.sticky.white {
@@ -40,66 +42,70 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-function Create(props) {
-  const [file, setFile] = useState(null);
+function Create() {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState(null);
   const [price, setPrice] = useState(null);
   const [royalties, setRoyalties] = useState(null);
+  const [collection, setCollection] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const CreateSchema = Yup.object().shape({
-    image: Yup.string().required("Required"),
+    image: Yup.mixed().required("Required"),
     title: Yup.string().required("Required"),
     description: Yup.string(),
-    price: Yup.number().moreThan(0, "Must more than 0"),
-    royalties: Yup.number().max(40, "Max is 40")
+    price: Yup.number().required("Required").moreThan(0, "Must more than 0"),
+    royalties: Yup.number().required("Required").min(0, "Min is 0").max(40, "Max is 40")
   });
 
   const formik = useFormik({
     initialValues: {
-      image: "",
+      image: null,
       title: "",
       description: "",
       price: "",
       royalties: ""
     },
     validationSchema: CreateSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      
+    onSubmit: async (values) => {
+      setLoading(true);
+      // store nft on ipfs
+      const uri = await storeNft(values.image, values.description);
+      const tokenId = await mintAndTransfer(collection.address, values.royalties, uri);
+      await sell(collection.address, tokenId, values.price);
+      const orders = await getAllOrders();
+      console.log(orders);
+      setLoading(false);
     }
   });
 
   const onImageChange = (e) => {
-    var m = URL.createObjectURL(e.target.files[0]);
-    console.log(m);
-    setFile(e.target.files[0]);
-    setImage(m);
-    formik.setFieldValue("image", m);
-  };
-
-  const onRoyaltiesChange = (e) => {
-    if (e.target.value >= 0 && e.target.value <= 40) {
-      formik.setFieldValue("royalties", e.target.value);
-      setRoyalties(e.target.value);
-    }
+    setImage(e.target.files[0]);
+    formik.setFieldValue("image", e.target.files[0]);
   };
 
   const onPriceChange = (e) => {
-    if (e.target.value >= 0) {
-      formik.setFieldValue("price", e.target.value);
-      setPrice(e.target.value);
-    }
+    formik.setFieldValue("price", e.target.value);
+    setPrice(e.target.value);
+  };
+  const onRoyaltiesChange = (e) => {
+    formik.setFieldValue("royalties", e.target.value);
+    setRoyalties(e.target.value);
   };
 
-  const newCollection = (e) => {
+  const onTitleChange = (e) => {
+    formik.setFieldValue("title", e.target.value);
+    setTitle(e.target.value);
+  };
+
+  const optionChange = (e) => {
     const data = {
       name: "My Token",
       symbol: "MTN",
       baseURL: "",
       thumbnail: "img/collections/coll-4.jpg"
     };
-    
+    console.log(e.target.value);
   };
 
   return (
@@ -128,22 +134,19 @@ function Create(props) {
 
                 <div className="d-create-file">
                   <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
-                  {file && <p id="file_name">{file.name}</p>}
+                  {image && <p id="file_name">{image.name}</p>}
                   <div className="browse">
                     <input type="button" id="get_file" className="btn-main" value="Browse" />
                     <input id="upload_file" type="file" multiple onChange={onImageChange} />
                   </div>
                 </div>
-
+                {formik.touched.image && formik.errors.image ? (
+                  <div className="invalid-feedback">{formik.errors.image}</div>
+                ) : null}
                 <div className="spacer-single"></div>
 
                 <h5>Collection</h5>
-                <ChooseCollection
-                  title="Create"
-                  subtitle="ERC-721"
-                  img="./img/plus.png"
-                  clickHandler={() => storeNft(file)}
-                />
+                <ChooseCollection setCollection={setCollection} />
 
                 <div className="spacer-single"></div>
 
@@ -154,12 +157,12 @@ function Create(props) {
                   id="item_title"
                   className="form-control"
                   placeholder="e.g. 'Crypto Funk"
-                  onChange={(e) => {
-                    formik.setFieldValue("title", e.target.value);
-                    setTitle(e.target.value);
-                  }}
+                  onChange={onTitleChange}
                   value={formik.values.title}
                 />
+                {formik.touched.title && formik.errors.title ? (
+                  <div className="invalid-feedback">{formik.errors.title}</div>
+                ) : null}
 
                 <div className="spacer-10"></div>
 
@@ -170,8 +173,7 @@ function Create(props) {
                   id="item_desc"
                   className="form-control"
                   placeholder="e.g. 'This is very limited item'"
-                  onChange={(e) => formik.setFieldValue("description", e.target.value)}
-                  value={formik.values.description}></textarea>
+                  {...formik.getFieldProps("description")}></textarea>
 
                 <div className="spacer-10"></div>
 
@@ -185,7 +187,9 @@ function Create(props) {
                   onChange={onPriceChange}
                   value={formik.values.price}
                 />
-
+                {formik.touched.price && formik.errors.price ? (
+                  <div className="invalid-feedback">{formik.errors.price}</div>
+                ) : null}
                 <div className="spacer-10"></div>
 
                 <h5>Royalties</h5>
@@ -198,10 +202,12 @@ function Create(props) {
                   onChange={onRoyaltiesChange}
                   value={formik.values.royalties}
                 />
-
+                {formik.touched.royalties && formik.errors.royalties ? (
+                  <div className="invalid-feedback">{formik.errors.royalties}</div>
+                ) : null}
                 <div className="spacer-10"></div>
-
-                <input type="submit" className="btn-main" value="Create Item" />
+                {loading ? <div>Loading...</div> : <div>Done!</div>}
+                <input type="submit" className="btn-main" disabled={loading} value="Create Item" />
               </div>
             </form>
           </div>
@@ -216,24 +222,25 @@ function Create(props) {
                 </span>
               </div>
               <div className="nft__item_wrap">
-                {!image && (
+                {image ? (
+                  <span>
+                    <img
+                      src={URL.createObjectURL(image)}
+                      id="get_file_2"
+                      className="lazy nft__item_preview"
+                      alt=""
+                    />
+                  </span>
+                ) : (
                   <span className="d-create-file" style={{ minHeight: "200px" }}>
                     <p>Upload file to preview your brand new NFT</p>
                   </span>
                 )}
-                {image && (
-                  <span>
-                    <img src={image} id="get_file_2" className="lazy nft__item_preview" alt="" />
-                  </span>
-                )}
               </div>
               <div className="nft__item_info">
-                <span>
-                  {!title && <h4>Title</h4>}
-                  {title && <h4>{title}</h4>}
-                </span>
-                <div className="nft__item_price">{price} ETH</div>
-                <div className="nft__item_price">{royalties}%</div>
+                <span>{title ? <h4>{title}</h4> : <h4>Title</h4>}</span>
+                <div className="nft__item_price">{price ? price : 0} ETH</div>
+                <div className="nft__item_price">{royalties ? royalties : 0} %</div>
               </div>
             </div>
           </div>

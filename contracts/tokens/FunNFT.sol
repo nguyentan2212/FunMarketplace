@@ -3,13 +3,19 @@ pragma solidity >=0.4.22 <0.9.0;
 
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
-import "../libraries/FunLibAsset.sol";
 import "./NFTBase.sol";
 
 contract FunNFT is NFTBase {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() initializer {}
+    struct Mint721Data {
+        uint256 tokenId;
+        string uri;
+        address creator;
+        uint256 royalty;
+        bytes signature;
+    }
     string private thumbnail;
 
     function initialize(string memory _name, string memory _symbol, string memory _baseTokenURI, string memory _thumbnail) 
@@ -25,7 +31,7 @@ contract FunNFT is NFTBase {
         thumbnail = _thumbnail;
     }
 
-    function transferOrMint(FunLibAsset.Mint721Data memory data, address from, address to) external {
+    function transferOrMint(Mint721Data memory data, address from, address to) external {
         if (_exists(data.tokenId)) {
             safeTransferFrom(from, to, data.tokenId);
         } else {
@@ -33,14 +39,14 @@ contract FunNFT is NFTBase {
         }
     }
 
-    function mintAndTransfer(FunLibAsset.Mint721Data memory data, address to) public {
+    function mintAndTransfer(Mint721Data memory data, address to) public {
         address minter = msg.sender;
         address creator = data.creator;
 
         require(minter == creator || isApprovedForAll(creator, minter), "ERC721: transfer caller is not owner nor approved");
 
         /*
-        Lazy minting will be suported soon...
+        Lazy minting 
         */
 
         bytes32 digest = _hash(address(this), data.creator, data.uri);

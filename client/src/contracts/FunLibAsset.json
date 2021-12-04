@@ -1,32 +1,29 @@
 {
   "contractName": "FunLibAsset",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/E/LamViec/fun-exchange/contracts/libraries/FunLibAsset.sol\":\"FunLibAsset\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/E/LamViec/fun-exchange/contracts/libraries/FunLibAsset.sol\":{\"keccak256\":\"0x02396dc9dc07a4d6d5448c75e28cec217decfc8ac37523b9d3991f04df420ec2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d7cb8d2f48636700d511e4f52db5d0ac72462de70eb35d8622e7285c1ee2cde5\",\"dweb:/ipfs/QmVo1dmEqoSsAnr98wiAoLUETRziZ5AyP1LxrrdWUesjzA\"]},\"/E/LamViec/fun-exchange/contracts/tokens/FunNFT.sol\":{\"keccak256\":\"0xb096a7ce5739dc537db19cab15b6078f6e864122ac2411be39a26f8d72fb1320\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://52cbbe774bf94f6e1df958493dc9ba7f680b6b0a7713f0f803a2094d7814691f\",\"dweb:/ipfs/QmWMycWMJ13C9X5bH73xZpAtGQAk3PsBdyowNc8evFCdpZ\"]},\"/E/LamViec/fun-exchange/contracts/tokens/NFTBase.sol\":{\"keccak256\":\"0xad6ee8d267d8d989ca6b8b776c19c0f346c651a7201f3d94b0c32ee41466821f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0d5983b19dc0d97efe3797f417d8bc719575fae805256a511c8c7f435e08dc9b\",\"dweb:/ipfs/Qmb2dVYVLsiMb6PVqRZgZDf2ZyBdfEVFkqadaEvf22nYbv\"]},\"/E/LamViec/fun-exchange/contracts/tokens/NFTDefaultApproval.sol\":{\"keccak256\":\"0x48b1fc60527173de2a1471d1dbf0a64c899f209e338eac46396ea4798876357b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://741ab1f32e5d62906ba4780c04dfcfd48b8501247cd2801d74e219022b70f389\",\"dweb:/ipfs/QmX4EQP1L599hsbVVR6rZXqv628JK9MeuYfprAfeqZpveG\"]},\"/E/LamViec/fun-exchange/contracts/tokens/NFTUpgradeable.sol\":{\"keccak256\":\"0x9d28c96c4408d06a61f731f718824d59c1a317bbc1b556e4b133f658ead7c422\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d55e726a66279da9ddda98529c998ab65f58374d59402db2719b208c25217eb7\",\"dweb:/ipfs/QmdLokVmBqC7VcDAmck8L1PXYBsDAkbDENVRbpkhLGnNRA\"]},\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x35b09b69aca3bc2633da8f47382a81ecf367efe57167a2114f60f9ec81988afa\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4dd39ae44599da9e6b59035de3cddcfaa8d7b2a45f1c887adf5a1e38315cf6cd\",\"dweb:/ipfs/QmcFVkc7m3MzxoiCWCb2yZuezqW7eQTEvnScNALXhdsyJu\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x8b2abd85d0ece7e866e100e9d47ca9cbec93c87cf71a8d267b2b93eb81f7d5e9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fe9fa1beb63e4a09637701f783982ba80380d630d600c9cafe26b68bf58be1b2\",\"dweb:/ipfs/QmRA3GXhTWys88joD9x8xYhdjzvGwmDGLMMzGw3LxbSEge\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x56f89378fca44345fe8de632c70311052c39d64a7a710513316676d343380e68\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d22f9bc8244dac77e7ad006ca89747592dcf9c5d181f18aecc6b13f5191b8636\",\"dweb:/ipfs/QmWf2BMCs8CSycNJj633v6u85uRzSnvC5uo6iPgCfwyG7T\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0x3d03f5cb8b9f17b75c3b6eb4921b1fe7b87ed77cf0c8638496eee5183a5101e0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5de186747a6b768851aeae14d616aeda91063e6f2330e735c4b83f6f1d8495d7\",\"dweb:/ipfs/QmWwSX9NKRS6qtQoKyS6S6HHmJ6kHhuar3LwssrejDMAMz\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0xfbb3ca7272af58dc245a20e91a1f68481ee04706fa3fe46d184000efc21f4bad\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://038cad5fc2950820d94eead6323b56c3b95442aaa91a62c648fbde3256208ef5\",\"dweb:/ipfs/QmUkfnMmgc5gt6Dj99TkYEwUuRcPqBpm4qnxb71mqj6Qep\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol\":{\"keccak256\":\"0xe2a579e3c0d885b5a230215af8964922bb6cea9c3cc2c96cd035dc84c063f276\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e88e55b66f4aa6ca8c315a8290f2a305d800d51c51e5c18204386ac9af19d3e4\",\"dweb:/ipfs/QmZM8mXPBDWPxtdMxaWTXoc9edHi472GG8EjjfT4pmfnJY\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol\":{\"keccak256\":\"0x3b68fc053bbad44644adcdddff840106591364bbc0879aac5505756b67fab974\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://106ffa55e61c6cf88e5a44a32f93128d4bb74cb61b6192bf6beb5d34f546babb\",\"dweb:/ipfs/QmZsVwrK11xxR51rrtCUXTCzt9WyeFpEvd855bJUMLEWiz\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol\":{\"keccak256\":\"0x41695fa16b1c8b9e8fc92315f7413ce2f5d67782290b6d785fef7143932d54a1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ed3fa6a16465008503d18994be2523c474130463c260a6e0c49bd4db80dc6789\",\"dweb:/ipfs/QmZ6gjU6jSunDFHnT9qD8sHzZemACw9dUC68xd9Gc3ab4q\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721EnumerableUpgradeable.sol\":{\"keccak256\":\"0x54b0a0b80c447749f769f37fec206cdee23e7466511802191248e95c8250ff9d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e2d1cc45300ee2767450dcdaf58fac80062cde47764503af11b2a5133d0eb880\",\"dweb:/ipfs/QmcZVDpaA9FZQLCSZkacDu2omniYrEuvVoEirVubMAa8Fo\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x6dd43e44dbaad99d1863be7f2837085f361efdcb1fde5a9bf84c4efa07f89ed3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bf7a5b97df8bb8abe1bceadd1c5ff55b334771182a237a358fd34e97b4ed6099\",\"dweb:/ipfs/QmfSGdYENk98pogMEBV4tzu4vUd6aFb2jFrBYfFNxbqQzz\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x946f08c0a132c5877d458d7af7956da60607f20a5c03dd75760708c848aae6b7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3b80d20ed113ad0be486d489e1cc2f0f4006b7893e579c2156e8c434d8eec382\",\"dweb:/ipfs/QmdB8QGghkRGcSkp4xAWCvohGgYXFU9ncMx82XSqDMiZJf\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x062b5a0f7cc6b0528fa350033759f3a15ba42afb57423d7c593753860f2c82e0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b3c8b4ec819fc9648ef5ae6b8edc474b2a631389fa73add4c4545e1918abe034\",\"dweb:/ipfs/Qmc8GzvTtCxR3mg3QuLRzycSMfsSjjZPyPALmLBjMxSGv6\"]},\"@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol\":{\"keccak256\":\"0x00c96e792d367a436015f12ce2665aa8e2a0d61d2c6045a82cbb37da20e5a042\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://218701651e76569ebc32085f92f8dad32906158344ecf830b6064f62ed848e60\",\"dweb:/ipfs/QmNQtn5YRZGHgSunzP5b5DyzotZTrCeFJzYbnN9BcTFD9T\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0xc7af08df3d3e818ce36f95aa879c13245772fed21b553e6033292ea4edc2a9f3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://639c22bcf1ba4c783016c3eed1d9b546444feecb917a67201d66b6762df0b8a2\",\"dweb:/ipfs/QmebyzSijf6BPXaXLHcJPZnPpLk48UW1esmUTEoGd4hHkv\"]},\"@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol\":{\"keccak256\":\"0x07411372282794f7ecde69a1065e5d20441abe7c9f8861437b4d45c9a4712fa6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f468fd0259997f562bff4a7225fa30470a51aef2a78415d2eae71cc5dad7b367\",\"dweb:/ipfs/QmT26ZSHekB1axTFXgnECg3xSezzUuG3Qe7avcLmtU99fb\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0x17c9c5d2d6b56527215ee7b3da6dde66b6f23f1b3d5c66cc436e753ef349a97a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dd7c775bc6000f44c048796b5e013dbb3ec7592986bc289868b19ff9439ee31d\",\"dweb:/ipfs/QmSuBfTT9z9sEpmEcGihEc5DJGsXery8QyyuNfvub875ej\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0x1c4860acd323e34a67b3e97faab9aaa55fe8e92b1dcf08b5f47f3468d58ce75c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3c2746f8ebb4bfb6b8e8a768296c7f85f11b36f4873daabb91933c3602f00590\",\"dweb:/ipfs/QmdumDez8WEdk9FDuP7Jp5pDSJiQeFtFSJw3B5CEHJL4KU\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122098e656ad9ab8a952132e6678f881a803b3718a236144689972503c788e9c61c164736f6c63430008060033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122098e656ad9ab8a952132e6678f881a803b3718a236144689972503c788e9c61c164736f6c63430008060033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/E/LamViec/fun-exchange/contracts/libraries/FunLibAsset.sol\":\"FunLibAsset\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/E/LamViec/fun-exchange/contracts/libraries/FunLibAsset.sol\":{\"keccak256\":\"0x39e9a92ee73dfeb09c98ce8324e385a84a36cff48cfc068273ff5cc1dfe4daa3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e474bfaca0c31651d6a610dc33788e140244e17ec8cbe9912062a3ce8f0add95\",\"dweb:/ipfs/QmUh7JvfAiVYY6z9wvXzSarUiJLQa1kRb9b1kqzh1NKC5b\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220aed850df553bba2805e4744e7c4ee4f8ee0022f4e7f03723c897fffa3facd0c364736f6c63430008060033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220aed850df553bba2805e4744e7c4ee4f8ee0022f4e7f03723c897fffa3facd0c364736f6c63430008060033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "94:184:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "94:184:1:-:0;;;;;;;;",
-  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.2;\r\n\r\nimport \"../tokens/FunNFT.sol\";\r\n\r\nlibrary FunLibAsset {\r\n\r\n    struct Mint721Data {\r\n        uint256 tokenId;\r\n        string uri;\r\n        address creator;\r\n        uint256 royalty;\r\n        bytes signature;\r\n    }\r\n}",
+  "sourceMap": "60:32:12:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "60:32:12:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.2;\r\n\r\nlibrary FunLibAsset {\r\n\r\n    \r\n}",
   "sourcePath": "E:\\LamViec\\fun-exchange\\contracts\\libraries\\FunLibAsset.sol",
   "ast": {
     "absolutePath": "/E/LamViec/fun-exchange/contracts/libraries/FunLibAsset.sol",
     "exportedSymbols": {
       "FunLibAsset": [
-        766
-      ],
-      "FunNFT": [
-        990
+        1564
       ]
     },
-    "id": 767,
+    "id": 1565,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 753,
+        "id": 1563,
         "literals": [
           "solidity",
           "^",
@@ -34,19 +31,7 @@
           ".2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:1"
-      },
-      {
-        "absolutePath": "/E/LamViec/fun-exchange/contracts/tokens/FunNFT.sol",
-        "file": "../tokens/FunNFT.sol",
-        "id": 754,
-        "nameLocation": "-1:-1:-1",
-        "nodeType": "ImportDirective",
-        "scope": 767,
-        "sourceUnit": 991,
-        "src": "60:30:1",
-        "symbolAliases": [],
-        "unitAlias": ""
+        "src": "33:23:12"
       },
       {
         "abstract": false,
@@ -54,186 +39,34 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 766,
+        "id": 1564,
         "linearizedBaseContracts": [
-          766
+          1564
         ],
         "name": "FunLibAsset",
-        "nameLocation": "102:11:1",
+        "nameLocation": "68:11:12",
         "nodeType": "ContractDefinition",
-        "nodes": [
-          {
-            "canonicalName": "FunLibAsset.Mint721Data",
-            "id": 765,
-            "members": [
-              {
-                "constant": false,
-                "id": 756,
-                "mutability": "mutable",
-                "name": "tokenId",
-                "nameLocation": "161:7:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "153:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 755,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "153:7:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 758,
-                "mutability": "mutable",
-                "name": "uri",
-                "nameLocation": "186:3:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "179:10:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 757,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "179:6:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 760,
-                "mutability": "mutable",
-                "name": "creator",
-                "nameLocation": "208:7:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "200:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
-                },
-                "typeName": {
-                  "id": 759,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "200:7:1",
-                  "stateMutability": "nonpayable",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 762,
-                "mutability": "mutable",
-                "name": "royalty",
-                "nameLocation": "234:7:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "226:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 761,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "226:7:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 764,
-                "mutability": "mutable",
-                "name": "signature",
-                "nameLocation": "258:9:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "252:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_bytes_storage_ptr",
-                  "typeString": "bytes"
-                },
-                "typeName": {
-                  "id": 763,
-                  "name": "bytes",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "252:5:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_storage_ptr",
-                    "typeString": "bytes"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "Mint721Data",
-            "nameLocation": "130:11:1",
-            "nodeType": "StructDefinition",
-            "scope": 766,
-            "src": "123:152:1",
-            "visibility": "public"
-          }
-        ],
-        "scope": 767,
-        "src": "94:184:1",
+        "nodes": [],
+        "scope": 1565,
+        "src": "60:32:12",
         "usedErrors": []
       }
     ],
-    "src": "33:245:1"
+    "src": "33:59:12"
   },
   "legacyAST": {
     "absolutePath": "/E/LamViec/fun-exchange/contracts/libraries/FunLibAsset.sol",
     "exportedSymbols": {
       "FunLibAsset": [
-        766
-      ],
-      "FunNFT": [
-        990
+        1564
       ]
     },
-    "id": 767,
+    "id": 1565,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 753,
+        "id": 1563,
         "literals": [
           "solidity",
           "^",
@@ -241,19 +74,7 @@
           ".2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:1"
-      },
-      {
-        "absolutePath": "/E/LamViec/fun-exchange/contracts/tokens/FunNFT.sol",
-        "file": "../tokens/FunNFT.sol",
-        "id": 754,
-        "nameLocation": "-1:-1:-1",
-        "nodeType": "ImportDirective",
-        "scope": 767,
-        "sourceUnit": 991,
-        "src": "60:30:1",
-        "symbolAliases": [],
-        "unitAlias": ""
+        "src": "33:23:12"
       },
       {
         "abstract": false,
@@ -261,169 +82,20 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 766,
+        "id": 1564,
         "linearizedBaseContracts": [
-          766
+          1564
         ],
         "name": "FunLibAsset",
-        "nameLocation": "102:11:1",
+        "nameLocation": "68:11:12",
         "nodeType": "ContractDefinition",
-        "nodes": [
-          {
-            "canonicalName": "FunLibAsset.Mint721Data",
-            "id": 765,
-            "members": [
-              {
-                "constant": false,
-                "id": 756,
-                "mutability": "mutable",
-                "name": "tokenId",
-                "nameLocation": "161:7:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "153:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 755,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "153:7:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 758,
-                "mutability": "mutable",
-                "name": "uri",
-                "nameLocation": "186:3:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "179:10:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_string_storage_ptr",
-                  "typeString": "string"
-                },
-                "typeName": {
-                  "id": 757,
-                  "name": "string",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "179:6:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_string_storage_ptr",
-                    "typeString": "string"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 760,
-                "mutability": "mutable",
-                "name": "creator",
-                "nameLocation": "208:7:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "200:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_address",
-                  "typeString": "address"
-                },
-                "typeName": {
-                  "id": 759,
-                  "name": "address",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "200:7:1",
-                  "stateMutability": "nonpayable",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_address",
-                    "typeString": "address"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 762,
-                "mutability": "mutable",
-                "name": "royalty",
-                "nameLocation": "234:7:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "226:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
-                },
-                "typeName": {
-                  "id": 761,
-                  "name": "uint256",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "226:7:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  }
-                },
-                "visibility": "internal"
-              },
-              {
-                "constant": false,
-                "id": 764,
-                "mutability": "mutable",
-                "name": "signature",
-                "nameLocation": "258:9:1",
-                "nodeType": "VariableDeclaration",
-                "scope": 765,
-                "src": "252:15:1",
-                "stateVariable": false,
-                "storageLocation": "default",
-                "typeDescriptions": {
-                  "typeIdentifier": "t_bytes_storage_ptr",
-                  "typeString": "bytes"
-                },
-                "typeName": {
-                  "id": 763,
-                  "name": "bytes",
-                  "nodeType": "ElementaryTypeName",
-                  "src": "252:5:1",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_bytes_storage_ptr",
-                    "typeString": "bytes"
-                  }
-                },
-                "visibility": "internal"
-              }
-            ],
-            "name": "Mint721Data",
-            "nameLocation": "130:11:1",
-            "nodeType": "StructDefinition",
-            "scope": 766,
-            "src": "123:152:1",
-            "visibility": "public"
-          }
-        ],
-        "scope": 767,
-        "src": "94:184:1",
+        "nodes": [],
+        "scope": 1565,
+        "src": "60:32:12",
         "usedErrors": []
       }
     ],
-    "src": "33:245:1"
+    "src": "33:59:12"
   },
   "compiler": {
     "name": "solc",
@@ -431,7 +103,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-11-25T07:41:55.497Z",
+  "updatedAt": "2021-12-03T08:56:46.977Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

@@ -15,6 +15,6 @@ module.exports = async function (deployer, network) {
     "Funny NFT",
     "FNFT",
     "",
-    "bafybeiagxjydhu57ufnixw4jktfhbflkbhzd32vvvps4yuofryntm5qkpu"
+    "QmPgE4P6BwsiwVwF3tswhPH3WEenq74fjbPCKSFoSUZRsq"
   );
 };

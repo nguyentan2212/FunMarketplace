@@ -3,10 +3,13 @@ pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol";
 import "../tokens/FunNFT.sol";
 
-contract Exchange is ReentrancyGuardUpgradeable {
+contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
     using CountersUpgradeable for CountersUpgradeable.Counter;
+    using SafeMathUpgradeable for uint256;
 
     struct Order {
         address seller;
@@ -46,10 +49,10 @@ contract Exchange is ReentrancyGuardUpgradeable {
         require(success, "transfer failed");
     }
 
-    function sell(Order memory order, FunLibAsset.Mint721Data memory data) external nonReentrant isValid(order) {
+    function sell(Order memory order) external nonReentrant isValid(order) {
         FunNFT token = FunNFT(order.tokenAddress);
 
-        token.transferOrMint(data, order.seller, address(this));
+        token.safeTransferFrom(order.seller, address(this), order.tokenId);
 
         uint256 currentId = _orderIdCounter.current();
 
@@ -78,8 +81,19 @@ contract Exchange is ReentrancyGuardUpgradeable {
         FunNFT token = FunNFT(order.tokenAddress);
         token.safeTransferFrom(address(this), buyer, order.tokenId);
 
+        // pay royalty for creator
+        uint256 money = order.price;
+        uint256 royalty = token.royaltyOf(order.tokenId);
+        address creator = token.creatorOf(order.tokenId);
+        if (royalty > 0){
+            uint256 temp = money.mul(royalty);
+            uint256 royaltyMoney = temp.div(100);
+            money = money.sub(royaltyMoney);
+            transferEth(creator, royaltyMoney);
+        }
+        
         // transfer payment token from buyer to seller
-        transferEth(order.seller, order.price);
+        transferEth(order.seller, money);
 
         order.buyer = buyer;
         _orderSoldCounter.increment();
