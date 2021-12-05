@@ -14,6 +14,6 @@ module.exports = async function (deployer) {
   await factory.createToken(
     "Funny NFT",
     "FNFT",
-    "QmPgE4P6BwsiwVwF3tswhPH3WEenq74fjbPCKSFoSUZRsq"
+    "https://ipfs.infura.io/ipfs/QmPgE4P6BwsiwVwF3tswhPH3WEenq74fjbPCKSFoSUZRsq"
   );
 };

@@ -27,11 +27,11 @@ export async function storeData(data) {
   return uri;
 }
 
-export async function storeNft(imageFile, description) {
+export async function storeNft(imageFile, title, description) {
   // store image on ipfs
   const imagePath = await storeData(imageFile);
   // create nft json data file
-  const nftJson = JSON.stringify({ imagePath, description });
+  const nftJson = JSON.stringify({ imagePath, title, description });
   // store nft data to ipfs
   const nftPath = await storeData(nftJson);
   console.log(nftPath);

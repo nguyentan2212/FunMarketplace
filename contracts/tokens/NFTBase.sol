@@ -14,7 +14,7 @@ contract NFTBase is Initializable, NFTDefaultApproval, OwnableUpgradeable {
     mapping(uint256 => address) private creators;
     mapping(uint256 => uint256) private royalties;
 
-    event Creator(uint256 tokenId, address creator, uint256 royalty);
+    event Creator(uint256 indexed tokenId, address indexed creator, uint256 royalty);
 
     function _baseURI() internal view override returns (string memory) {
         return baseTokenURI;

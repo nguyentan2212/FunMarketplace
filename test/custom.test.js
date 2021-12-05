@@ -1,10 +1,11 @@
 const FunNFT = artifacts.require("FunNFT");
 const CollectionFactory = artifacts.require("TokenFactory");
 const Exchange = artifacts.require("Exchange");
-
+const AccountManager = artifacts.require("Account");
 contract("test factory", async (accounts) => {
   var factory = null;
   var exchange = null;
+  var accountManager = null;
   const ZeroAddess = "0x0000000000000000000000000000000000000000";
   const account = {
     public: "0x66Fee2F75fAeC3f5ecB0cd24E40d2b0389E650b5",
@@ -14,6 +15,7 @@ contract("test factory", async (accounts) => {
   before("init", async () => {
     factory = await CollectionFactory.deployed();
     exchange = await Exchange.deployed();
+    accountManager = await AccountManager.deployed();
   });
 
   it("get init collection", async () => {
@@ -52,4 +54,11 @@ contract("test factory", async (accounts) => {
     const orders = await exchange.fetchOrderOf(account.public);
     assert.equal(orders.length, 1, "1 order");
   });
+
+  it("test account manager", async () => {
+    await accountManager.registerOrUpdate("hello");
+    const isVerified = await accountManager.isVerified(account.public);
+
+    assert.equal(isVerified, true,"account must be verified");
+  })
 });

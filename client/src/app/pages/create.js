@@ -78,7 +78,7 @@ function Create() {
         allowOutsideClick: false,
         didOpen: async () => {
           Swal.showLoading();
-          uri = await storeNft(values.image, values.description);
+          uri = await storeNft(values.image, values.title, values.description);
           Swal.close();
         }
       });
@@ -87,7 +87,7 @@ function Create() {
         title: "Mint NFT",
         didOpen: async () => {
           Swal.showLoading();
-          tokenId = await mintAndTransfer(collection.address, values.royalties, uri);
+          tokenId = await mintAndTransfer(collection, values.royalties, uri);
           Swal.close();
         }
       });
@@ -96,7 +96,7 @@ function Create() {
         title: "Place order",
         didOpen: async () => {
           Swal.showLoading();
-          await sell(collection.address, tokenId, values.price);
+          await sell(collection, tokenId, values.price);
           Swal.close();
         }
       });

@@ -18,11 +18,14 @@ export const getCollectionInfo = async (address) => {
   const collection = await initContract(FunNFT, address);
   const name = await collection.name();
   const symbol = await collection.symbol();
-  return { name, symbol, address };
+  const thumbnail = await collection.getThumbnail();
+
+  return { name, symbol, address, thumbnail };
 };
 
 export const mintAndTransfer = async (collection, royalty, tokenURI) => {
   const creator = await getCurrentAccount();
+  console.log(creator, collection, tokenURI);
   const signature = await signMintData(creator, collection, tokenURI);
   const mintData = [0, tokenURI, creator, royalty, signature];
   const token = await initContract(FunNFT, collection);

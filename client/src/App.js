@@ -6,6 +6,7 @@ import { createGlobalStyle } from "styled-components";
 import Home from "./app/pages/home";
 import Create from "./app/pages/create";
 import { initWeb3 } from "./scripts/ethereum";
+import ItemDetail from "./app/pages/ItemDetail";
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -48,6 +49,7 @@ function App() {
             <Redirect to="/home" />
           </Home>
           <Create path="/create" />
+          <ItemDetail path="ItemDetail" />
         </ScrollTop>
       </PosedRouter>
       <ScrollToTopBtn />

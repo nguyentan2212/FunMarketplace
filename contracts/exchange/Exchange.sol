@@ -25,9 +25,9 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
     CountersUpgradeable.Counter internal _orderSoldCounter;
     mapping(uint256 => Order) private orders;
 
-    event New(uint256 id, address seller, address tokenAddress, uint256 tokenId, uint256 price);
-    event Canceled(uint256 id, address seller, address tokenAddress, uint256 tokenId, uint256 price);
-    event Sold(uint256 id, address seller, address tokenAddress, uint256 tokenId, uint256 price, address buyer);
+    event New(uint256 indexed id, Order indexed order);
+    event Canceled(uint256 indexed id, Order indexed order);
+    event Sold(uint256 indexed id, Order indexed order);
 
     constructor() {
 
@@ -65,7 +65,7 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
         newOrder.isCancelled = order.isCancelled;
 
         _orderIdCounter.increment();
-        emit New(currentId, order.seller, order.tokenAddress, order.tokenId, order.price);
+        emit New(currentId, newOrder);
     }
 
     function buy(uint256 orderId) external nonReentrant {
@@ -97,7 +97,7 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
 
         order.buyer = buyer;
         _orderSoldCounter.increment();
-        emit Sold(orderId, order.seller, order.tokenAddress, order.tokenId, order.price, order.buyer);
+        emit Sold(orderId, order);
     }
 
     function cancel(uint256 orderId) external {
@@ -109,7 +109,7 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
         token.safeTransferFrom(address(this), order.seller, order.tokenId);
 
         orders[orderId].isCancelled = true;
-        emit Canceled(orderId, order.seller, order.tokenAddress, order.tokenId, order.price);
+        emit Canceled(orderId, order);
     }
 
     /* Returns all unsold orders */

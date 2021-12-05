@@ -1,33 +1,56 @@
-import {useState, useEffect} from 'react';
-import { initContract } from '../ethereum';
+import { useState, useEffect } from "react";
+import { initContract } from "../ethereum";
+import { getAccountInfo } from "../account";
 const FunNFT = require("../../contracts/FunNFT.json");
 
 const useNft = (tokenAddress, tokenId) => {
-    const [name, setName] = useState(null);
-    const [symbol, setSymbol] = useState(null);
-    const [uri, setUri] = useState(null);
-    const [data, setData] = useState(null);
-    const [image, setImage] = useState(null);
-    const [creator, setCreator] = useState(null);
-    const [royalty, setRoyalty] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [uri, setUri] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [image, setImage] = useState(null);
+  const [creator, setCreator] = useState(null);
+  const [owner, setOwner] = useState(null);
+  const [royalty, setRoyalty] = useState(null);
+  const [collection, setCollection] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const token = await initContract(FunNFT, tokenAddress);
-            const tname = await token.name();
-            const tsymbol = await token.symbol();
-            const turi = await token.tokenURI();
-            const tcreator = await token.creatorOf(tokenId);
-            const troyalty = await token.royaltyOf(tokenId);
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = await initContract(FunNFT, tokenAddress);
+      
 
-            setName(tname);
-            setSymbol(tsymbol);
-            setUri(turi);
-            setCreator(tcreator);
-            setRoyalty(troyalty);
-        }
-    },[tokenAddress, tokenId]);
-    return {name, symbol, uri, data, image, creator, royalty};
-}
+      // collection info
+      const collectionName = await token.name();
+      const collectionThumbnail = await token.getThumbnail();
+      setCollection({ name: collectionName, thumbnail: collectionThumbnail });
+
+      // token uri
+      const turi = await token.tokenURI(tokenId);
+      setUri(turi);
+
+      // token data : title - image path - description
+      const tdata = await fetch(turi).then((response) => response.json());
+      setDescription(tdata.description);
+      setImage(tdata.imagePath);
+      setTitle(tdata.title);
+
+      // token royalty
+      const troyalty = await token.royaltyOf(tokenId);
+      setRoyalty(troyalty);
+
+      // token creator
+      const creatorAddress = await token.creatorOf(tokenId);
+      const tcreator = await getAccountInfo(creatorAddress);
+      console.log(tcreator);
+      setCreator(tcreator);
+
+      // token owner
+      const ownerAddress = await token.ownerOf(tokenId);
+      const towner = await getAccountInfo(ownerAddress);
+      setOwner(towner);
+    };
+    fetchData();
+  }, [tokenAddress, tokenId]);
+  return { title, uri, description, image, creator, owner, royalty, collection };
+};
 
 export default useNft;
