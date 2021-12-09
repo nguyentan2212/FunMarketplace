@@ -9,10 +9,13 @@ import "../node_modules/bootstrap/dist/js/bootstrap.js";
 import "./assets/style.scss";
 import App from "./App";
 import "./index.css";
+import { AppProvider } from "./scripts/contexts/AppProvider";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <App />,
+  <AppProvider>
+    <App />
+  </AppProvider>,
   document.getElementById("root")
 );
 // If you want your app to work offline and load faster, you can change
