@@ -1,4 +1,4 @@
-import { initContract, ZeroAddess, getCurrentAccount, toWei } from "./ethereum";
+import { initContract, ZeroAddess, getCurrentAccount, toWei, fromWei } from "./ethereum";
 const Exchange = require("../contracts/Exchange.json");
 
 export async function sell(tokenAddress, tokenId, price) {
@@ -19,6 +19,14 @@ export async function sell(tokenAddress, tokenId, price) {
 
 export async function getAllOrders() {
   const exchange = await initContract(Exchange);
-  const orders = exchange.fetchOrders();
+  const orders = await exchange.fetchOrders();
+  return orders;
+}
+
+export async function getOrderOf(address) {
+  const exchange = await initContract(Exchange);
+  const orders = await exchange.fetchOrderOf(address);
+  console.log(orders);
+
   return orders;
 }
