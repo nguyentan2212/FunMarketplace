@@ -43,8 +43,31 @@ export const createCollection = async (thumbnailURI, name, symbol) => {
   const factory = await initContract(Factory);
   const creator = await getCurrentAccount();
   try {
-    await factory.createToken(name, symbol, thumbnailURI, {from: creator});
+    await factory.createToken(name, symbol, thumbnailURI, { from: creator });
   } catch (e) {
     console.log(e);
   }
+};
+
+const getTokenOf = async (collection, address) => {
+  const token = await initContract(FunNFT, collection);
+  const balance = await token.balanceOf(address);
+  var result = [];
+  var count = 0;
+  for (let i = 0; i < balance; i++) {
+    const temp = await token.tokenOfOwnerByIndex(address, i);
+    result[count] = { tokenAddress: collection, tokenId: temp };
+  }
+  return result;
+};
+
+export const getAllTokenOf = async (address) => {
+  const factory = await initContract(Factory);
+  const collections = await factory.fetchCollectionOf(address);
+  var result = [];
+  collections.forEach(async (element) => {
+    const temp = await getTokenOf(element, address);
+    result = [...result, ...temp];
+  });
+  return result;
 };
