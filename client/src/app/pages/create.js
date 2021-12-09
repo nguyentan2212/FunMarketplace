@@ -9,6 +9,7 @@ import { storeNft } from "../../scripts/ipfs";
 import { sell, getAllOrders } from "../../scripts/exchange";
 import { mintAndTransfer } from "../../scripts/tokenFactory";
 import NewCollectionModal from "../components/NewCollectionModal";
+import { AppContext } from "../../scripts/contexts/AppProvider";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.sticky.white {
@@ -45,6 +46,7 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 function Create() {
+  const {user} = useContext(AppContext);
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState(null);
   const [price, setPrice] = useState(null);
@@ -236,7 +238,7 @@ function Create() {
             <div className="nft__item m-0">
               <div className="author_list_pp">
                 <span>
-                  <img className="lazy" src="./img/author/author-1.jpg" alt="" />
+                  <img className="lazy" src={user.thumbnail ? user.thumbnail :"./img/author/author-1.jpg"} alt="" />
                   <i className="fa fa-check"></i>
                 </span>
               </div>
