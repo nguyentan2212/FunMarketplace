@@ -85,3 +85,11 @@ export const toWei = async (number) => {
   const wei = await web3.utils.toWei(number);
   return wei;
 }
+
+export const fromWei = async (number) => {
+  if(!web3){
+    await initWeb3();
+  }
+  const ether = await web3.utils.fromWei(number);
+  return ether;
+}
