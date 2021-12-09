@@ -10,10 +10,11 @@ export async function getAccountInfo(address) {
     const uri = await accountMng.accountURI(address);
     const data = await fetch(uri).then((response) => response.json());
     const username = data.username;
-    const thumbnail = data.thumbnail;
-    return { address, username, thumbnail, balance, isVerified: true };
+    const avatar = data.avatar;
+    const banner = data.banner;
+    return { address, username, avatar, banner, balance, isVerified: true };
   }
-  return { address, username: "Guest", thumbnail: "./img/author/author-6.jpg", balance, isVerified: false };
+  return { address, username: "Guest", avatar: "/img/author/author-6.jpg", banner: "/img/gallery/1.jpg", balance, isVerified: false };
 }
 
 export async function registerOrUpdate(uri) {
