@@ -40,7 +40,7 @@ const useNft = (tokenAddress, tokenId) => {
       // token creator
       const creatorAddress = await token.creatorOf(tokenId);
       const tcreator = await getAccountInfo(creatorAddress);
-      console.log(tcreator);
+
       setCreator(tcreator);
 
       // token owner
