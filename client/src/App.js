@@ -8,6 +8,7 @@ import Home from "./app/pages/home";
 import Create from "./app/pages/create";
 import Wallet from "./app/pages/Wallet";
 import ItemDetail from "./app/pages/ItemDetail";
+import Author from "./app/pages/Author";
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -52,6 +53,7 @@ function App() {
           <Create path="/create" />
           <ItemDetail path="ItemDetail" />
           <Wallet path="/wallet" />
+          <Author path="/author/:address"/>
         </ScrollTop>
       </PosedRouter>
       <ScrollToTopBtn />
