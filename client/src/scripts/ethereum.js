@@ -68,3 +68,20 @@ export const signMintData = async (account, tokenAddress, tokenURI) => {
   const signature = await web3.eth.personal.sign(hash, account);
   return signature;
 };
+
+export const getBalance = async (account) => {
+  if(!web3){
+    await initWeb3();
+  }
+  const weiBalance = await web3.eth.getBalance(account);
+  const balance = await web3.utils.fromWei(weiBalance);
+  return balance;
+}
+
+export const toWei = async (number) => {
+  if(!web3){
+    await initWeb3();
+  }
+  const wei = await web3.utils.toWei(number);
+  return wei;
+}
