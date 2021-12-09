@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import Breakpoint, { BreakpointProvider, setDefaultBreakpoints } from "react-socks";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 import useOnclickOutside from "react-cool-onclickoutside";
 import { AppContext } from "../../../scripts/contexts/AppProvider";
 
@@ -521,7 +521,7 @@ const Header = function () {
                 className="de-menu-profile"
                 onClick={() => btn_icon_pop(!showpop)}
                 ref={refpop}>
-                <img src={user.thumbnail} alt="" />
+                <img src={user.avatar} alt="" />
                 {showpop && (
                   <div className="popshow">
                     <div className="d-name">
@@ -546,7 +546,7 @@ const Header = function () {
                     <div className="d-line"></div>
                     <ul className="de-submenu-profile">
                       <li>
-                        <span>
+                        <span onClick={() => navigate(`/author/${user.address}`)}>
                           <i className="fa fa-user"></i> My profile
                         </span>
                       </li>
