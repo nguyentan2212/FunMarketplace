@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Router, Location, Redirect } from "@reach/router";
-import ScrollToTopBtn from "./components/menu/ScrollToTop";
-import Header from "./components/menu/header";
+import ScrollToTopBtn from "./app/components/menu/ScrollToTop";
+import Header from "./app/components/menu/header";
 import { createGlobalStyle } from "styled-components";
+import { initWeb3 } from "./scripts/ethereum";
 import Home from "./app/pages/home";
 import Create from "./app/pages/create";
-import { initWeb3 } from "./scripts/ethereum";
+import Wallet from "./app/pages/Wallet";
 import ItemDetail from "./app/pages/ItemDetail";
 
 const GlobalStyles = createGlobalStyle`
@@ -50,6 +51,7 @@ function App() {
           </Home>
           <Create path="/create" />
           <ItemDetail path="ItemDetail" />
+          <Wallet path="/wallet" />
         </ScrollTop>
       </PosedRouter>
       <ScrollToTopBtn />
