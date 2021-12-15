@@ -4,7 +4,7 @@ import NftList from "../components/NftList";
 import Footer from "../components/footer";
 import { getOrderOf } from "../../scripts/exchange";
 import { getAccountInfo } from "../../scripts/account";
-import { getAllTokenOf } from "../../scripts/tokenFactory";
+import { getAllTokenOf, getCreatedTokensOf } from "../../scripts/tokenFactory";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.white {
@@ -37,24 +37,40 @@ function Author({ address }) {
       towned = [...tsale, ...towned];
       setOwned(towned);
 
+      var tcreated = await getCreatedTokensOf(address);
+      setCreated(tcreated);
+
       const tuser = await getAccountInfo(address);
       setUser(tuser);
     };
     fetchData();
   }, []);
   const [openMenu, setOpenMenu] = React.useState(true);
+  const [openMenu1, setOpenMenu1] = React.useState(false);
   const [openMenu2, setOpenMenu2] = React.useState(false);
   const handleBtnClick = () => {
     setOpenMenu(!openMenu);
+    setOpenMenu1(false);
     setOpenMenu2(false);
     document.getElementById("Mainbtn").classList.add("active");
+    document.getElementById("Mainbtn1").classList.remove("active");
+    document.getElementById("Mainbtn2").classList.remove("active");
+  };
+  const handleBtnClick1 = () => {
+    setOpenMenu1(!openMenu1);
+    setOpenMenu2(false);
+    setOpenMenu(false);
+    document.getElementById("Mainbtn1").classList.add("active");
+    document.getElementById("Mainbtn").classList.remove("active");
     document.getElementById("Mainbtn2").classList.remove("active");
   };
   const handleBtnClick2 = () => {
     setOpenMenu2(!openMenu2);
     setOpenMenu(false);
+    setOpenMenu1(false);
     document.getElementById("Mainbtn2").classList.add("active");
     document.getElementById("Mainbtn").classList.remove("active");
+    document.getElementById("Mainbtn1").classList.remove("active");
   };
 
   return (
@@ -107,8 +123,11 @@ function Author({ address }) {
                 <li id="Mainbtn" className="active">
                   <span onClick={handleBtnClick}>On Sale</span>
                 </li>
+                <li id="Mainbtn1" className="">
+                  <span onClick={handleBtnClick1}>Owned</span>
+                </li>
                 <li id="Mainbtn2" className="">
-                  <span onClick={handleBtnClick2}>Owned</span>
+                  <span onClick={handleBtnClick2}>Created</span>
                 </li>
               </ul>
             </div>
@@ -119,9 +138,14 @@ function Author({ address }) {
             <NftList nfts={sale} />
           </div>
         )}
+        {openMenu1 && created && ( 
+        <div id='zero2' className='onStep fadeIn'>
+         <NftList nfts={owned} />
+        </div>
+      )}
         {openMenu2 && owned && (
           <div id="zero3" className="onStep fadeIn">
-            <NftList nfts={owned} />
+            <NftList nfts={created} />
           </div>
         )}
       </section>

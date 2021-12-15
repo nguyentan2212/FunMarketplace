@@ -31,7 +31,6 @@ contract("test factory", async (accounts) => {
   //   const { signature } = await web3.eth.accounts.sign(hash, account.private);
 
   //   const totalSupply = await token.totalSupply();
-    
 
   //   const mintData = [totalSupply, tokenURI, account.public, 1, signature];
 
@@ -49,16 +48,29 @@ contract("test factory", async (accounts) => {
 
     const mintData = [0, tokenURI, account.public, 1, signature];
     await token.transferOrMint(mintData, account.public, account.public);
-    const order = [account.public, tokenAddress, 0, ZeroAddess, 1, false];
+    const order = [0, account.public, tokenAddress, 0, ZeroAddess, 1, false];
     await exchange.sell(order);
     const orders = await exchange.fetchOrderOf(account.public);
     assert.equal(orders.length, 1, "1 order");
+  });
+
+  it("buy", async () => {
+    const tokenAddress = await factory.fetchCollection(0);
+    const token = await FunNFT.at(tokenAddress);
+
+    try {
+      await exchange.buy(0, { from: "0x66BdAC0E007F8c6713229655BD265378c26f4fDC", value: 1 });
+    } catch (e) {
+      console.log(e);
+    }
+    const owner = await token.ownerOf(0);
+    assert.equal(owner, "0x66BdAC0E007F8c6713229655BD265378c26f4fDC", "must be owner");
   });
 
   it("test account manager", async () => {
     await accountManager.registerOrUpdate("hello");
     const isVerified = await accountManager.isVerified(account.public);
 
-    assert.equal(isVerified, true,"account must be verified");
-  })
+    assert.equal(isVerified, true, "account must be verified");
+  });
 });

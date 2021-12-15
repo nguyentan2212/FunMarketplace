@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import * as Swal from "sweetalert2";
 import useNft from "../../scripts/hooks/useNft";
 import Footer from "../components/footer";
+import { cancellOrder, getNewestOrderOf, sell, buy } from "../../scripts/exchange";
 import { createGlobalStyle } from "styled-components";
+import { fromWei, getCurrentAccount } from "../../scripts/ethereum";
+import { AppContext } from "../../scripts/contexts/AppProvider";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.white {
@@ -21,197 +25,235 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-function ItemDetail(props) {
-  const address = "0x253F7EB2fA01F77fD76400C17083860Bd9A7b9ED";
-  const tokenId = 0;
-  const item = useNft(address, tokenId);
+function ItemDetail({ address, id }) {
+  const item = useNft(address, id);
+  const { user } = useContext(AppContext);
+  const [order, setOrder] = useState(null);
+  const [price, setPrice] = useState(0);
+  const [account, setAccount] = useState(null);
+  const [reload, setReload] = useState(false);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const temp = await getNewestOrderOf(address, id);
+      setOrder(temp);
+      const tprice = temp ? await fromWei(temp.price) : "0";
+      setPrice(tprice);
+      const tacc = await getCurrentAccount();
+      setAccount(tacc);
+    };
+    fetchData();
+  }, [reload]);
+
+  const removeFromSell = async () => {
+    await Swal.fire({
+      title: "Remove from sale",
+      didOpen: async () => {
+        Swal.showLoading();
+        await cancellOrder(order.id);
+        Swal.close();
+      }
+    });
+    setReload(!reload);
+  };
+
+  const putOnSale = async () => {
+    var error = null;
+    const { value: price } = await Swal.fire({
+      title: "Enter item's price",
+      input: "number",
+      inputLabel: "Enter item's price here",
+      inputValidator: (value) => {
+        if (value <= 0) {
+          return "Price must greater than 0!";
+        }
+      }
+    });
+
+    if (price) {
+      await Swal.fire({
+        title: "Place order",
+        didOpen: async () => {
+          Swal.showLoading();
+          try {
+            await sell(address, id, price);
+          } catch (e) {
+            error = e;
+          }
+          Swal.close();
+        }
+      });
+    }
+
+    if (error) {
+      await Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!"
+      });
+    } else {
+      await Swal.fire({
+        icon: "success",
+        title: "Success"
+      });
+    }
+    setReload(!reload);
+  };
+
+  const buyItem = async () => {
+    var error = null;
+    await Swal.fire({
+      title: "Buy item",
+      didOpen: async () => {
+        Swal.showLoading();
+        try {
+          await buy(order.id, order.price);
+        } catch (e) {
+          error = e;
+        }
+        Swal.close();
+      }
+    });
+    if (error) {
+      await Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!"
+      });
+    } else {
+      await Swal.fire({
+        icon: "success",
+        title: "Success"
+      });
+    }
+    setReload(!reload);
+  };
   return (
     <div>
       <GlobalStyles />
 
       <section className="container">
-        <div className="row mt-md-5 pt-md-4">
-          <div className="col-md-6 text-center">
-            <img src={item.image} className="img-fluid img-rounded mb-sm-30" alt="" />
-          </div>
-          <div className="col-md-6">
-            <div className="item_info">
-              <h2>{item.title}</h2>
-              <div className="item_info_counts">
-                <div className="item_info_type">
-                  <i className="fa fa-image"></i>Art
+        {item && (
+          <div className="row mt-md-5 pt-md-4">
+            <div className="col-md-5 text-center">
+              <img src={item.image} className="img-fluid img-rounded mb-sm-30" alt="" />
+            </div>
+            <div className="col-md-7">
+              <div className="item_info">
+                <h2>{item.title}</h2>
+                <div className="item_info_counts">
+                  <div className="item_info_type">
+                    <i className="fa fa-image"></i>Art
+                  </div>
+                  <div className="item_info_views">
+                    <i className="fa fa-eye"></i>250
+                  </div>
+                  <div className="item_info_like">
+                    <i className="fa fa-heart"></i>18
+                  </div>
                 </div>
-                <div className="item_info_views">
-                  <i className="fa fa-eye"></i>250
-                </div>
-                <div className="item_info_like">
-                  <i className="fa fa-heart"></i>18
+                <div className="row">
+                  <div className="mb-5 col-lg-4 col-sm-6">
+                    <h5>Creator</h5>
+                    <div className="item_author">
+                      <div className="author_list_pp">
+                        <span>
+                          <img
+                            className="lazy"
+                            src={item.creator && item.creator.avatar}
+                            alt=""
+                            width={50}
+                            height={50}
+                          />
+                          {item.creator && item.creator.isVerified ? (
+                            <i className="fa fa-check"></i>
+                          ) : null}
+                        </span>
+                      </div>
+                      <div className="author_list_info">
+                        <span>{item.creator && item.creator.username}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-5 col-lg-4 col-sm-6">
+                    <h5>Owner</h5>
+                    <div className="item_author">
+                      <div className="author_list_pp">
+                        <span>
+                          <img
+                            className="lazy"
+                            src={item.owner && item.owner.avatar}
+                            alt=""
+                            width={50}
+                            height={50}
+                          />
+                          {item.owner && item.owner.isVerified ? (
+                            <i className="fa fa-check"></i>
+                          ) : null}
+                        </span>
+                      </div>
+                      <div className="author_list_info">
+                        <span>{item.owner && item.owner.username}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-5 col-lg-4 col-sm-6">
+                    <h5>Collection</h5>
+                    <div className="item_author">
+                      <div className="author_list_pp">
+                        <span>
+                          <img
+                            className="lazy"
+                            src={item.collection && item.collection.thumbnail}
+                            alt=""
+                            width={50}
+                            height={50}
+                          />
+                        </span>
+                      </div>
+                      <div className="author_list_info">
+                        <span>{item.collection && item.collection.name}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <h5>Description</h5>
+                  <p>{item.description}</p>
+                  <div className="row">
+                    <div className="col-6 d-flex">
+                      <h5 className="me-2">Royalty</h5>
+                      <p>{item.royalty}%</p>
+                    </div>
+                    {order && price && (
+                      <div className="col-6 d-flex">
+                        <h5 className="me-2">Price</h5>
+                        <p>{price} ETH</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <p>{item.description}</p>
-              <div className="row">
-                <div className="me-4 mb-5 col-lg-4 col-sm-6">
-                  <h6>Creator</h6>
-                  <div className="item_author">
-                    <div className="author_list_pp">
-                      <span>
-                        <img
-                          className="lazy"
-                          src={item.creator && item.creator.thumbnail}
-                          alt=""
-                          width={50}
-                          height={50}
-                        />
-                        {item.creator && item.creator.isVerified ? (
-                          <i className="fa fa-check"></i>
-                        ) : null}
-                      </span>
-                    </div>
-                    <div className="author_list_info">
-                      <span>{item.creator && item.creator.username}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="me-4 mb-5 col-lg-4 col-sm-6">
-                  <h6>Collection</h6>
-                  <div className="item_author">
-                    <div className="author_list_pp">
-                      <span>
-                        <img
-                          className="lazy"
-                          src={item.collection && item.collection.thumbnail}
-                          alt=""
-                          width={50}
-                          height={50}
-                        />
-                      </span>
-                    </div>
-                    <div className="author_list_info">
-                      <span>{item.collection && item.collection.name}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="me-4 mb-5 col-lg-4 col-sm-6">
-                  <h6>Owner</h6>
-                  <div className="item_author">
-                    <div className="author_list_pp">
-                      <span>
-                        <img
-                          className="lazy"
-                          src={item.owner && item.owner.thumbnail}
-                          alt=""
-                          width={50}
-                          height={50}
-                        />
-                        {item.owner && item.owner.isVerified ? (
-                          <i className="fa fa-check"></i>
-                        ) : null}
-                      </span>
-                    </div>
-                    <div className="author_list_info">
-                      <span>{item.owner && item.owner.username}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div className="de_tab">
-                <ul className="de_nav">
-                  <li id="Mainbtn1" className="active">
-                    <span>History</span>
-                  </li>
-                </ul>
-
-                <div className="de_tab_content">
-                  <div className="tab-2 onStep fadeIn">
-                    <div className="p_list">
-                      <div className="p_list_pp">
-                        <span>
-                          <img className="lazy" src="./img/author/author-5.jpg" alt="" />
-                          <i className="fa fa-check"></i>
-                        </span>
-                      </div>
-                      <div className="p_list_info">
-                        Bid <b>0.005 ETH</b>
-                        <span>
-                          by <b>Jimmy Wright</b> at 6/14/2021, 6:40 AM
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p_list">
-                      <div className="p_list_pp">
-                        <span>
-                          <img className="lazy" src="./img/author/author-1.jpg" alt="" />
-                          <i className="fa fa-check"></i>
-                        </span>
-                      </div>
-                      <div className="p_list_info">
-                        Bid accepted <b>0.005 ETH</b>
-                        <span>
-                          by <b>Monica Lucas</b> at 6/15/2021, 3:20 AM
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p_list">
-                      <div className="p_list_pp">
-                        <span>
-                          <img className="lazy" src="./img/author/author-2.jpg" alt="" />
-                          <i className="fa fa-check"></i>
-                        </span>
-                      </div>
-                      <div className="p_list_info">
-                        Bid <b>0.005 ETH</b>
-                        <span>
-                          by <b>Mamie Barnett</b> at 6/14/2021, 5:40 AM
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p_list">
-                      <div className="p_list_pp">
-                        <span>
-                          <img className="lazy" src="./img/author/author-3.jpg" alt="" />
-                          <i className="fa fa-check"></i>
-                        </span>
-                      </div>
-                      <div className="p_list_info">
-                        Bid <b>0.004 ETH</b>
-                        <span>
-                          by <b>Nicholas Daniels</b> at 6/13/2021, 5:03 AM
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p_list">
-                      <div className="p_list_pp">
-                        <span>
-                          <img className="lazy" src="./img/author/author-4.jpg" alt="" />
-                          <i className="fa fa-check"></i>
-                        </span>
-                      </div>
-                      <div className="p_list_info">
-                        Bid <b>0.003 ETH</b>
-                        <span>
-                          by <b>Lori Hart</b> at 6/12/2021, 12:57 AM
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {/* button for checkout */}
+              <div className="d-flex flex-row mt-2 justify-content-center">
+                {order && account && user.isLogin && order.seller == account && (
+                  <button className="btn-main lead mb-5 mr15" onClick={removeFromSell}>
+                    Remove from sale
+                  </button>
+                )}
+                {order == null && account && user.isLogin && item.owner && account == item.owner.address && (
+                  <button className="btn-main lead mb-5 mr15" onClick={putOnSale}>
+                    Put on sale
+                  </button>
+                )}
+                {order && account && order.seller != account && (
+                  <button className="btn-main lead mb-5 mr15" onClick={buyItem}>
+                    Buy Now
+                  </button>
+                )}
               </div>
             </div>
-
-            {/* button for checkout */}
-            <div className="d-flex flex-row mt-5">
-              <button className="btn-main lead mb-5 mr15" >
-                Remove from sale
-              </button>
-            </div>
           </div>
-        </div>
+        )}
       </section>
 
       <Footer />

@@ -46,7 +46,7 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 function Create() {
-  const {user} = useContext(AppContext);
+  const { user } = useContext(AppContext);
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState(null);
   const [price, setPrice] = useState(null);
@@ -190,6 +190,7 @@ function Create() {
 
                 <h5>Description</h5>
                 <textarea
+                  rows={8}
                   data-autoresize
                   name="item_desc"
                   id="item_desc"

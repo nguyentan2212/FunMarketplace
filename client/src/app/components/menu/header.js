@@ -100,6 +100,11 @@ const Header = function () {
       window.removeEventListener("scroll", scrollCallBack);
     };
   }, []);
+
+  const logoutHandle = () => {
+    logout();
+    navigate("/wallet");
+  }
   return (
     <header id="myHeader" className="navbar white">
       <div className="container">
@@ -556,7 +561,7 @@ const Header = function () {
                         </span>
                       </li>
                       <li>
-                        <span onClick={logout}>
+                        <span onClick={logoutHandle}>
                           <i className="fa fa-sign-out"></i> Sign out
                         </span>
                       </li>

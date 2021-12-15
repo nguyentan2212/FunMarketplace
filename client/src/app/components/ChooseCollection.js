@@ -46,7 +46,7 @@ function ChooseCollection(props) {
               </option>
             ))}
         </select>
-        <button className="btn-main" type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+        <button className="btn-main" type="button" data-bs-toggle="modal" data-bs-target="#newCollectionModal">
           New
         </button>
       </div>

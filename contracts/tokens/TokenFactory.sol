@@ -45,8 +45,8 @@ contract TokenFactory {
 
         for (uint256 i = 0; i < totalCollections; i++) {
             FunNFT collection = FunNFT(_collections[i]);
-            address owner = collection.owner();
-            if (account == owner){
+            uint256 balance = collection.balanceOf(account);
+            if (balance > 0){
                 collectionCount += 1;
             }
         }
@@ -56,8 +56,8 @@ contract TokenFactory {
         collectionCount = 0;
         for (uint256 i = 0; i < totalCollections; i++) {
             FunNFT collection = FunNFT(_collections[i]);
-            address owner = collection.owner();
-            if (account == owner){
+            uint256 balance = collection.balanceOf(account);
+            if (balance > 0){
                 collections[collectionCount] = _collections[i];
                 collectionCount += 1;
             }

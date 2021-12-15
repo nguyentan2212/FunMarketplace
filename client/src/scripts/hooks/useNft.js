@@ -12,45 +12,51 @@ const useNft = (tokenAddress, tokenId) => {
   const [owner, setOwner] = useState(null);
   const [royalty, setRoyalty] = useState(null);
   const [collection, setCollection] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = await initContract(FunNFT, tokenAddress);
-      
+      try {
+        const token = await initContract(FunNFT, tokenAddress);
 
-      // collection info
-      const collectionName = await token.name();
-      const collectionThumbnail = await token.getThumbnail();
-      setCollection({ name: collectionName, thumbnail: collectionThumbnail });
+        // collection info
+        const collectionName = await token.name();
+        const collectionThumbnail = await token.getThumbnail();
+        setCollection({ name: collectionName, thumbnail: collectionThumbnail });
 
-      // token uri
-      const turi = await token.tokenURI(tokenId);
-      setUri(turi);
+        // token uri
+        const turi = await token.tokenURI(tokenId);
+        setUri(turi);
 
-      // token data : title - image path - description
-      const tdata = await fetch(turi).then((response) => response.json());
-      setDescription(tdata.description);
-      setImage(tdata.imagePath);
-      setTitle(tdata.title);
+        // token data : title - image path - description
+        const tdata = await fetch(turi).then((response) => response.json());
+        setDescription(tdata.description);
+        setImage(tdata.imagePath);
+        setTitle(tdata.title);
 
-      // token royalty
-      const troyalty = await token.royaltyOf(tokenId);
-      setRoyalty(troyalty);
+        // token royalty
+        const troyalty = await token.royaltyOf(tokenId);
+        setRoyalty(troyalty.toNumber());
 
-      // token creator
-      const creatorAddress = await token.creatorOf(tokenId);
-      const tcreator = await getAccountInfo(creatorAddress);
+        // token creator
+        const creatorAddress = await token.creatorOf(tokenId);
+        const tcreator = await getAccountInfo(creatorAddress);
 
-      setCreator(tcreator);
+        setCreator(tcreator);
 
-      // token owner
-      const ownerAddress = await token.ownerOf(tokenId);
-      const towner = await getAccountInfo(ownerAddress);
-      setOwner(towner);
+        // token owner
+        const ownerAddress = await token.ownerOf(tokenId);
+        const towner = await getAccountInfo(ownerAddress);
+        setOwner(towner);
+      } catch (e) {
+        console.log(e);
+        setError(e);
+      }
     };
     fetchData();
   }, [tokenAddress, tokenId]);
-  return { title, uri, description, image, creator, owner, royalty, collection };
+
+  return error ? null : { title, uri, description, image, creator, owner, royalty, collection };
 };
 
 export default useNft;

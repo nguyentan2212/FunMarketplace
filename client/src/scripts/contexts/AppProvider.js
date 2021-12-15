@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import { removeToken, saveToken } from "../localStorage";
 
 export const AppContext = createContext();
 
@@ -19,10 +20,12 @@ export function AppProvider({ children }) {
       banner: data.banner,
       balance: data.balance
     });
+    saveToken({address: data.address});
   };
 
   const logout = () => {
     setUser((user) => ({ ...user, isLogin: false }));
+    removeToken();
   };
 
   return (

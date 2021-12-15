@@ -61,7 +61,7 @@ function NewCollectionModal(props) {
   };
 
   return (
-    <div className="modal fade" id="myModal" tabIndex={-1}>
+    <div className="modal fade" id="newCollectionModal" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <form className="form-border" onSubmit={formik.handleSubmit}>

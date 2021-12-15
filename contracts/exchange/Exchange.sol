@@ -12,6 +12,7 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
     using SafeMathUpgradeable for uint256;
 
     struct Order {
+        uint256 id;
         address seller;
         address tokenAddress;
         uint256 tokenId;
@@ -41,6 +42,9 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
 
         // buyer asset
         require(order.price > 0, "Cost should be greater than zero.");
+
+        // token is already placed a sell order
+        require(isOpenedOrder(order.tokenAddress, order.tokenId) == false, "Token is already placed a sell order");
         _;
     }
 
@@ -63,12 +67,13 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
         newOrder.buyer =  order.buyer;
         newOrder.price = order.price;
         newOrder.isCancelled = order.isCancelled;
+        newOrder.id = currentId;
 
         _orderIdCounter.increment();
         emit New(currentId, newOrder);
     }
 
-    function buy(uint256 orderId) external nonReentrant {
+    function buy(uint256 orderId) external payable nonReentrant {
         require(orderId >= 0 && orderId < _orderIdCounter.current(), "wrong id.");
         
         Order storage order = orders[orderId];
@@ -136,14 +141,14 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
         uint256 currentIndex = 0;
 
         for (uint i = 0; i < totalItemCount; i++) {
-            if (orders[i].seller == seller && orders[i].buyer == address(0)){
+            if (orders[i].seller == seller && orders[i].buyer == address(0) && orders[i].isCancelled == false){
                 itemCount += 1;
             }
         }
 
         Order[] memory items = new Order[](itemCount);
         for (uint256 i = 0; i < totalItemCount; i++) {
-            if (orders[i].seller == seller && orders[i].buyer == address(0)) {
+            if (orders[i].seller == seller && orders[i].buyer == address(0) && orders[i].isCancelled == false) {
                 Order memory currentItem = orders[i];
                 items[currentIndex] = currentItem;
                 currentIndex += 1;
@@ -173,5 +178,37 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
             }
         }
         return items;
+    }
+
+    function isOpenedOrder(address tokenAddress, uint256 tokenId) internal view returns(bool){
+        uint256 totalItemCount = _orderIdCounter.current();
+        uint256 index = totalItemCount;
+
+        for(uint256 i = 0; i < totalItemCount; i++){
+            if (orders[i].tokenAddress == tokenAddress && orders[i].tokenId == tokenId)
+            {
+                index = i;
+            }
+        }
+        if (index < totalItemCount && orders[index].buyer == address(0) && orders[index].isCancelled == false){
+            return true;
+        }
+        return false;
+    }
+
+    function getNewestOrderOf(address tokenAddress, uint256 tokenId) external view returns(Order memory){
+        uint256 totalItemCount = _orderIdCounter.current();
+        uint256 index = totalItemCount;
+
+        for(uint256 i = 0; i < totalItemCount; i++){
+            if (orders[i].tokenAddress == tokenAddress && orders[i].tokenId == tokenId)
+            {
+                index = i;
+            }
+        }
+        if (index < totalItemCount && orders[index].buyer == address(0) && orders[index].isCancelled == false){
+            return orders[index];
+        }
+        revert("Not found");
     }
 }

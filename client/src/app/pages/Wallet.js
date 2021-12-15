@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { navigate } from "@reach/router";
 import Footer from "../components/footer";
 import { createGlobalStyle } from "styled-components";
 import { getCurrentAccount } from "../../scripts/ethereum";
@@ -45,6 +46,7 @@ function Wallet() {
     const address = await getCurrentAccount();
     const user = await getAccountInfo(address);
     login(user);
+    navigate("/home");
   };
   return (
     <div>

@@ -64,10 +64,28 @@ const getTokenOf = async (collection, address) => {
 export const getAllTokenOf = async (address) => {
   const factory = await initContract(Factory);
   const collections = await factory.fetchCollectionOf(address);
+  console.log(collections);
   var result = [];
-  collections.forEach(async (element) => {
-    const temp = await getTokenOf(element, address);
+  for (let i = 0; i < collections.length; i++) {
+    const temp = await getTokenOf(collections[i], address);
     result = [...result, ...temp];
+  }
+  return result;
+};
+
+export const getCreatedTokensOf = async (address) => {
+  const factory = await initContract(Factory);
+  const collections = await factory.fetchCreatedTokenOf(address);
+  var result = [];
+  var count = 0;
+  collections.forEach(async (element) => {
+    const token = await initContract(FunNFT, element);
+    const num = await token.createdTokenOf(address);
+    for (let i = 1; i <= num; i++) {
+      const id = await token.createdTokenOfCreatorByIndex(address, i);
+      result[count] = { tokenAddress: element, tokenId: id };
+      count++;
+    }
   });
   return result;
 };
