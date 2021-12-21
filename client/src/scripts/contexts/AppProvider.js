@@ -9,7 +9,8 @@ export function AppProvider({ children }) {
     username: null,
     address: null,
     avatar: null,
-    balance: 0
+    balance: 0,
+    isVerified: false
   });
   const login = (data) => {
     setUser({
@@ -18,7 +19,8 @@ export function AppProvider({ children }) {
       address: data.address,
       avatar: data.avatar,
       banner: data.banner,
-      balance: data.balance
+      balance: data.balance,
+      isVerified: data.isVerified
     });
     saveToken({address: data.address});
   };
@@ -28,7 +30,9 @@ export function AppProvider({ children }) {
     removeToken();
   };
 
+  const [searchString, setSearchString] = useState(null);
+
   return (
-    <AppContext.Provider value={{ user, setUser, login, logout }}>{children}</AppContext.Provider>
+    <AppContext.Provider value={{ user, setUser, login, logout, searchString, setSearchString }}>{children}</AppContext.Provider>
   );
 }

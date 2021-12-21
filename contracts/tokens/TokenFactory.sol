@@ -8,6 +8,7 @@ import "./FunNFT.sol";
 contract TokenFactory {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _collectionIdCounter;
+    
     mapping(uint256 => address) private _collections;
     address private exchangeProxy;
 
@@ -39,14 +40,25 @@ contract TokenFactory {
         result = _collections[index];
     }
 
+    function getAllCollections() external view returns(address[] memory collections){
+        uint256 totalCollections = _collectionIdCounter.current();
+        collections = new address[](totalCollections);
+
+        for (uint256 i = 0; i < totalCollections; i++) {
+            collections[i] = _collections[i];
+        }
+        
+        return collections;
+    }
+
     function fetchCollectionOf(address account) external view returns (address[] memory collections){
         uint256 totalCollections = _collectionIdCounter.current();
         uint256 collectionCount = 0;
 
         for (uint256 i = 0; i < totalCollections; i++) {
             FunNFT collection = FunNFT(_collections[i]);
-            uint256 balance = collection.balanceOf(account);
-            if (balance > 0){
+            address owner = collection.owner();
+            if (owner == account){
                 collectionCount += 1;
             }
         }
@@ -56,8 +68,8 @@ contract TokenFactory {
         collectionCount = 0;
         for (uint256 i = 0; i < totalCollections; i++) {
             FunNFT collection = FunNFT(_collections[i]);
-            uint256 balance = collection.balanceOf(account);
-            if (balance > 0){
+            address owner = collection.owner();
+            if (owner == account){
                 collections[collectionCount] = _collections[i];
                 collectionCount += 1;
             }

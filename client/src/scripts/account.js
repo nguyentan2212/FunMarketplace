@@ -1,4 +1,4 @@
-import { initContract, getBalance } from "./ethereum";
+import { initContract, getBalance, getCurrentAccount } from "./ethereum";
 const Account = require("../contracts/Account.json");
 
 export async function getAccountInfo(address) {
@@ -14,10 +14,12 @@ export async function getAccountInfo(address) {
     const banner = data.banner;
     return { address, username, avatar, banner, balance, isVerified: true };
   }
+  
   return { address, username: "Guest", avatar: "/img/author/author-6.jpg", banner: "/img/gallery/1.jpg", balance, isVerified: false };
 }
 
 export async function registerOrUpdate(uri) {
   const accountMng = await initContract(Account);
-  await accountMng.registerOrUpdate(uri);
+  const account = await getCurrentAccount();
+  await accountMng.registerOrUpdate(uri, {from: account});
 }

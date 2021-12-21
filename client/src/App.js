@@ -12,6 +12,9 @@ import ItemDetail from "./app/pages/ItemDetail";
 import Author from "./app/pages/Author";
 import { alreadyLogin, getToken } from "./scripts/localStorage";
 import { getAccountInfo } from "./scripts/account";
+import Collection from "./app/pages/Collection";
+import Profile from "./app/pages/Profile";
+import Explore from "./app/pages/Explore";
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -45,7 +48,9 @@ function App() {
         const { address } = getToken();
         const account = await getAccountInfo(address);
         login(account);
+        console.log(user);
       }
+      
     };
     init();
   }, []);
@@ -59,11 +64,14 @@ function App() {
           <Home exact path="/">
             <Redirect to="home" />
           </Home>
-          {!user.isLogin && <Redirect from="/create" to="/wallet" noThrow />}
+          {!user.isLogin && alreadyLogin() == false && <Redirect from="/create" to="/wallet" noThrow />}
           <Create path="create" />
           <ItemDetail path="detail/:address/:id" />
           <Wallet path="wallet" />
           <Author path="author/:address" />
+          <Collection path="collection/:address" />
+          <Explore path="explore" />
+          <Profile path="profile" />
         </ScrollTop>
       </PosedRouter>
       <ScrollToTopBtn />

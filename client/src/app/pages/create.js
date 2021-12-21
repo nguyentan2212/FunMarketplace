@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import Swal from "sweetalert2";
 import ChooseCollection from "../components/ChooseCollection";
 import { storeNft } from "../../scripts/ipfs";
-import { sell, getAllOrders } from "../../scripts/exchange";
+import { sell } from "../../scripts/exchange";
 import { mintAndTransfer } from "../../scripts/tokenFactory";
 import NewCollectionModal from "../components/NewCollectionModal";
 import { AppContext } from "../../scripts/contexts/AppProvider";
@@ -61,6 +61,7 @@ function Create() {
     price: Yup.number().required("Required").moreThan(0, "Must more than 0"),
     royalties: Yup.number().required("Required").min(0, "Min is 0").max(40, "Max is 40")
   });
+
 
   const formik = useFormik({
     initialValues: {

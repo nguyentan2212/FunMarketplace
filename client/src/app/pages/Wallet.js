@@ -82,10 +82,10 @@ function Wallet() {
 
           <div className="col-lg-3 mb30">
             <span className="box-url">
-              <img src="./img/wallet/2.png" alt="" className="mb20" />
-              <h4>Bitski</h4>
+              <img src="./img/wallet/9.png" alt="" className="mb20" height={70}/>
+              <h4>C98 Wallet</h4>
               <p>
-                Bitski connects communities, creators and brands through unique, ownable digital
+                C98 connects communities, creators and brands through unique, ownable digital
                 content.
               </p>
             </span>

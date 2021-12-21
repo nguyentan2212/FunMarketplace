@@ -1,4 +1,6 @@
-import { initContract, getCurrentAccount, signMintData } from "./ethereum";
+import { getAccountInfo } from "./account";
+import { initContract, getCurrentAccount, signMintData, fromWei } from "./ethereum";
+import { getNewestOrderOf } from "./exchange";
 const Factory = require("../contracts/TokenFactory.json");
 const FunNFT = require("../contracts/FunNFT.json");
 
@@ -14,13 +16,49 @@ export const getCollectionsOf = async (address) => {
   return collections;
 };
 
-export const getCollectionInfo = async (address) => {
-  const collection = await initContract(FunNFT, address);
-  const name = await collection.name();
-  const symbol = await collection.symbol();
-  const thumbnail = await collection.getThumbnail();
+export const getAllCollections = async () => {
+  const factory = await initContract(Factory);
+  const collectionsAddress = await factory.getAllCollections();
+  let result = [];
+  for (let i = 0; i < collectionsAddress.length; i++) {
+    const address = collectionsAddress[i];
+    const collection = await initContract(FunNFT, address);
+    const name = await collection.name();
+    const symbol = await collection.symbol();
+    const thumbnail = await collection.getThumbnail();
+    result[i] = { name, symbol, address, thumbnail };
+  }
 
-  return { name, symbol, address, thumbnail };
+  return result;
+};
+
+export const getCollectionInfo = async (address) => {
+  try {
+    const collection = await initContract(FunNFT, address);
+    const name = await collection.name();
+    const symbol = await collection.symbol();
+    const thumbnail = await collection.getThumbnail();
+    const author = await collection.owner();
+    const totalSupply = await collection.totalSupply();
+    var items = [];
+    for (let i = 0; i < totalSupply; i++) {
+      const order = await getNewestOrderOf(address, i);
+      if (order) {
+        items[i] = {
+          tokenAddress: address,
+          tokenId: i,
+          price: order.price,
+          seller: order.seller
+        };
+      } else {
+        items[i] = { tokenAddress: address, tokenId: i };
+      }
+    }
+    return { name, symbol, address, thumbnail, author, items };
+  } catch (e) {
+    console.log(e);
+  }
+  return null;
 };
 
 export const mintAndTransfer = async (collection, royalty, tokenURI) => {
@@ -78,14 +116,44 @@ export const getCreatedTokensOf = async (address) => {
   const collections = await factory.fetchCreatedTokenOf(address);
   var result = [];
   var count = 0;
-  collections.forEach(async (element) => {
+  for (let j = 0; j < collections.length; j++) {
+    const element = collections[j];
     const token = await initContract(FunNFT, element);
     const num = await token.createdTokenOf(address);
     for (let i = 1; i <= num; i++) {
       const id = await token.createdTokenOfCreatorByIndex(address, i);
-      result[count] = { tokenAddress: element, tokenId: id };
+      //const id = tid.toNumber();
+      const order = await getNewestOrderOf(element, id);
+      if (order) {
+        result[count] = {
+          tokenAddress: element,
+          tokenId: id,
+          price: order.price,
+          seller: order.seller
+        };
+      } else {
+        result[count] = { tokenAddress: element, tokenId: id };
+      }
       count++;
     }
-  });
+  }
+  console.log(result);
   return result;
+};
+
+export const getNft = async (address, id) => {
+  const token = await initContract(FunNFT, address);
+  const name = await token.name();
+  const symbol = await token.symbol();
+  const authorAddress = await token.owner();
+  const author = await getAccountInfo(authorAddress);
+  const uri = await token.tokenURI(id);
+  const data = await fetch(uri).then((response) => response.json());
+  return {
+    address: address.toUpperCase(),
+    name: name.toUpperCase(),
+    symbol: symbol.toUpperCase(),
+    author: author.username.toUpperCase(),
+    title: data.title.toUpperCase()
+  };
 };

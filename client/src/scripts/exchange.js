@@ -1,4 +1,5 @@
-import { initContract, ZeroAddess, getCurrentAccount, toWei, fromWei } from "./ethereum";
+import { initContract, ZeroAddess, getCurrentAccount, toWei } from "./ethereum";
+import { getNft } from "./tokenFactory";
 const Exchange = require("../contracts/Exchange.json");
 
 export async function sell(tokenAddress, tokenId, price) {
@@ -17,9 +18,32 @@ export async function sell(tokenAddress, tokenId, price) {
   }
 }
 
-export async function getAllOrders() {
+export async function getAllOrders(search) {
   const exchange = await initContract(Exchange);
   const orders = await exchange.fetchOrders();
+
+  if (search) {
+    search = search.toUpperCase();
+    let result = [];
+    let count = 0;
+    for (let i = 0; i < orders.length; i++) {
+      const order = orders[i];
+      const item = await getNft(order.tokenAddress, order.tokenId);
+      console.log(item);
+      if (
+        item.name.includes(search) ||
+        item.symbol.includes(search) ||
+        item.title.includes(search) ||
+        item.author.includes(search) ||
+        item.address.includes(search)
+      ) {
+        result[count] = order;
+        count++;
+        console.log(item);
+      }
+    }
+    return result;
+  }
   return orders;
 }
 
@@ -39,7 +63,6 @@ export async function getNewestOrderOf(address, id) {
   } catch (error) {
     console.warn(error);
   }
-  console.log('null');
   return null;
 }
 

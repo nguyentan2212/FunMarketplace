@@ -4,8 +4,10 @@ import useNft from "../../scripts/hooks/useNft";
 import Footer from "../components/footer";
 import { cancellOrder, getNewestOrderOf, sell, buy } from "../../scripts/exchange";
 import { createGlobalStyle } from "styled-components";
-import { fromWei, getCurrentAccount } from "../../scripts/ethereum";
+import { fromWei, getCurrentAccount, getBalance } from "../../scripts/ethereum";
 import { AppContext } from "../../scripts/contexts/AppProvider";
+import { Link } from "@reach/router";
+import { getAccountInfo } from "../../scripts/account";
 
 const GlobalStyles = createGlobalStyle`
   header#myHeader.navbar.white {
@@ -27,11 +29,12 @@ const GlobalStyles = createGlobalStyle`
 
 function ItemDetail({ address, id }) {
   const item = useNft(address, id);
-  const { user } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
   const [order, setOrder] = useState(null);
   const [price, setPrice] = useState(0);
   const [account, setAccount] = useState(null);
   const [reload, setReload] = useState(false);
+  const [seller, setSeller] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +42,8 @@ function ItemDetail({ address, id }) {
       setOrder(temp);
       const tprice = temp ? await fromWei(temp.price) : "0";
       setPrice(tprice);
+      const tseller = temp ? await getAccountInfo(temp.seller) : null;
+      setSeller(tseller);
       const tacc = await getCurrentAccount();
       setAccount(tacc);
     };
@@ -127,6 +132,8 @@ function ItemDetail({ address, id }) {
       });
     }
     setReload(!reload);
+    const tbalance = await getBalance(user.address);
+    setUser((user) => ({ ...user, balance: tbalance }));
   };
   return (
     <div>
@@ -157,7 +164,7 @@ function ItemDetail({ address, id }) {
                     <h5>Creator</h5>
                     <div className="item_author">
                       <div className="author_list_pp">
-                        <span>
+                        <Link to={`/author/${item.creator && item.creator.address}`}>
                           <img
                             className="lazy"
                             src={item.creator && item.creator.avatar}
@@ -168,7 +175,7 @@ function ItemDetail({ address, id }) {
                           {item.creator && item.creator.isVerified ? (
                             <i className="fa fa-check"></i>
                           ) : null}
-                        </span>
+                        </Link>
                       </div>
                       <div className="author_list_info">
                         <span>{item.creator && item.creator.username}</span>
@@ -177,31 +184,51 @@ function ItemDetail({ address, id }) {
                   </div>
                   <div className="mb-5 col-lg-4 col-sm-6">
                     <h5>Owner</h5>
-                    <div className="item_author">
-                      <div className="author_list_pp">
-                        <span>
-                          <img
-                            className="lazy"
-                            src={item.owner && item.owner.avatar}
-                            alt=""
-                            width={50}
-                            height={50}
-                          />
-                          {item.owner && item.owner.isVerified ? (
-                            <i className="fa fa-check"></i>
-                          ) : null}
-                        </span>
+                    {seller ? (
+                      <div className="item_author">
+                        <div className="author_list_pp">
+                          <Link to={`/author/${seller.address}`}>
+                            <img
+                              className="lazy"
+                              src={seller.avatar}
+                              alt=""
+                              width={50}
+                              height={50}
+                            />
+                            {seller.isVerified ? <i className="fa fa-check"></i> : null}
+                          </Link>
+                        </div>
+                        <div className="author_list_info">
+                          <span>{seller.username}</span>
+                        </div>
                       </div>
-                      <div className="author_list_info">
-                        <span>{item.owner && item.owner.username}</span>
+                    ) : (
+                      <div className="item_author">
+                        <div className="author_list_pp">
+                          <Link to={`/author/${item.owner && item.owner.address}`}>
+                            <img
+                              className="lazy"
+                              src={item.owner && item.owner.avatar}
+                              alt=""
+                              width={50}
+                              height={50}
+                            />
+                            {item.owner && item.owner.isVerified ? (
+                              <i className="fa fa-check"></i>
+                            ) : null}
+                          </Link>
+                        </div>
+                        <div className="author_list_info">
+                          <span>{item.owner && item.owner.username}</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                   <div className="mb-5 col-lg-4 col-sm-6">
                     <h5>Collection</h5>
                     <div className="item_author">
                       <div className="author_list_pp">
-                        <span>
+                        <Link to={`/collection/${item.collection && item.collection.address}`}>
                           <img
                             className="lazy"
                             src={item.collection && item.collection.thumbnail}
@@ -209,7 +236,7 @@ function ItemDetail({ address, id }) {
                             width={50}
                             height={50}
                           />
-                        </span>
+                        </Link>
                       </div>
                       <div className="author_list_info">
                         <span>{item.collection && item.collection.name}</span>
@@ -240,11 +267,15 @@ function ItemDetail({ address, id }) {
                     Remove from sale
                   </button>
                 )}
-                {order == null && account && user.isLogin && item.owner && account == item.owner.address && (
-                  <button className="btn-main lead mb-5 mr15" onClick={putOnSale}>
-                    Put on sale
-                  </button>
-                )}
+                {order == null &&
+                  account &&
+                  user.isLogin &&
+                  item.owner &&
+                  account == item.owner.address && (
+                    <button className="btn-main lead mb-5 mr15" onClick={putOnSale}>
+                      Put on sale
+                    </button>
+                  )}
                 {order && account && order.seller != account && (
                   <button className="btn-main lead mb-5 mr15" onClick={buyItem}>
                     Buy Now

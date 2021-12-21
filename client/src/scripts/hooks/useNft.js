@@ -22,7 +22,7 @@ const useNft = (tokenAddress, tokenId) => {
         // collection info
         const collectionName = await token.name();
         const collectionThumbnail = await token.getThumbnail();
-        setCollection({ name: collectionName, thumbnail: collectionThumbnail });
+        setCollection({ name: collectionName, thumbnail: collectionThumbnail, address: tokenAddress });
 
         // token uri
         const turi = await token.tokenURI(tokenId);

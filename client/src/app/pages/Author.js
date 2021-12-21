@@ -90,7 +90,7 @@ function Author({ address }) {
               <div className="de-flex-col">
                 <div className="profile_avatar">
                   {user.avatar && <img src={user.avatar} alt="" />}
-                  <i className="fa fa-check"></i>
+                  {user.isVerified && <i className="fa fa-check"></i>}
                   <div className="profile_name">
                     <h4>
                       {user.username}
@@ -138,11 +138,11 @@ function Author({ address }) {
             <NftList nfts={sale} />
           </div>
         )}
-        {openMenu1 && created && ( 
-        <div id='zero2' className='onStep fadeIn'>
-         <NftList nfts={owned} />
-        </div>
-      )}
+        {openMenu1 && created && (
+          <div id="zero2" className="onStep fadeIn">
+            <NftList nfts={owned} />
+          </div>
+        )}
         {openMenu2 && owned && (
           <div id="zero3" className="onStep fadeIn">
             <NftList nfts={created} />

@@ -125,7 +125,7 @@ contract Exchange is ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
 
         Order[] memory items = new Order[](unsoldItemCount);
         for (uint256 i = 0; i < itemCount; i++) {
-            if (orders[i].buyer == address(0)) {
+            if (orders[i].buyer == address(0) && orders[i].isCancelled == false) {
                 Order memory currentItem = orders[i];
                 items[currentIndex] = currentItem;
                 currentIndex += 1;

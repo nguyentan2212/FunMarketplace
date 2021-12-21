@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { getAllCollections } from "../../scripts/tokenFactory";
-import { navigate } from "@reach/router";
+import NftCard from "./NftCard";
+import { getAllOrders } from "../../scripts/exchange";
 
 function CustomSlide(props) {
-  const { index, ...prop } = props;
-  return <div {...prop}></div>;
+  const { index, ...childProps } = props;
+  return <div {...childProps}></div>;
 }
 
 var settings = {
@@ -16,6 +16,7 @@ var settings = {
   slidesToShow: 4,
   slidesToScroll: 1,
   initialSlide: 0,
+  adaptiveHeight: 300,
   responsive: [
     {
       breakpoint: 1900,
@@ -60,17 +61,28 @@ var settings = {
   ]
 };
 
-function CarouselCollection() {
-  const [collections, setCollections] = useState(null);
+function CarouselNewOrders() {
+  const [height, setHeight] = useState(0);
+  const [nfts, setNfts] = useState([]);
+
+  const onImgLoad = ({ target: img }) => {
+    let currentHeight = height;
+    if (currentHeight < img.offsetHeight) {
+      if (img.offsetHeight > 320) {
+        setHeight(300);
+      } else {
+        setHeight(img.offsetHeight);
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const tcols = await getAllCollections();
-      setCollections(tcols);
-      if (tcols.length < 8) {
-        setCollections(tcols);
+      const torders = await getAllOrders();
+      if (torders.length < 8) {
+        setNfts(torders);
       } else {
-        setCollections(tcols.slice(0, 7));
+        setNfts(torders.slice(0, 7));
       }
     };
     fetchData();
@@ -78,29 +90,24 @@ function CarouselCollection() {
 
   return (
     <div className="nft">
-      {collections && (
-        <Slider {...settings}>
-          {collections.map((collection, index) => (
+      <Slider {...settings}>
+        {nfts &&
+          nfts.map((nft, index) => (
             <CustomSlide className="itm" index={index} key={index}>
-              <div className="nft_coll">
-                <div className="nft_wrap">
-                  <span>
-                    <img src={collection.thumbnail} className="lazy img-fluid" alt="" />
-                  </span>
-                </div>
-                <div className="nft_coll_info">
-                  <span onClick={() => navigate(`/collection/${collection.address}`)}>
-                    <h4>{collection.name}</h4>
-                  </span>
-                  <span>{collection.symbol}</span>
-                </div>
-              </div>
+              <NftCard
+                className="mb-2 me-2"
+                address={nft.tokenAddress}
+                id={nft.tokenId}
+                key={index}
+                onImgLoad={onImgLoad}
+                height={height}
+                price={nft.price}
+              />
             </CustomSlide>
           ))}
-        </Slider>
-      )}
+      </Slider>
     </div>
   );
 }
 
-export default CarouselCollection;
+export default CarouselNewOrders;
